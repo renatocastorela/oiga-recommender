@@ -34,7 +34,7 @@ public class FoursquareCategoryScraper {
 				.request(MediaType.TEXT_PLAIN_TYPE)
 				.get(String.class);
 		logger.debug("Respuesta recibida: "+response);
-		
+		/*TODO: Mover la clase response*/
 		FoursquareResponse<List<Category>> fr = client.target("https://api.foursquare.com/v2")
 				.path("/venues/categories")
 				.queryParam(_CLIENT_ID_PARAM, clientId)
