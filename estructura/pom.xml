@@ -20,9 +20,10 @@
     <id>central</id>
     <url>http://repo.maven.apache.org/maven2/</url>
 </repository>
+
 	</repositories>
-	
-	
+
+
 	<dependencies>
 		<dependency>
             <groupId>javax.xml.bind</groupId>
@@ -41,8 +42,7 @@
 			<artifactId>spring-data-neo4j</artifactId>
 			<version>2.3.1.RELEASE</version>
 		</dependency>
-				
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -84,34 +84,34 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		
-		  <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-spatial</artifactId>
-            <version>0.9</version>
-        </dependency>
-		
-		  <dependency>
-            <groupId>com.tinkerpop.gremlin</groupId>
-            <artifactId>gremlin-groovy</artifactId>
-            <version>1.4</version>
-            <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.tinkerpop.blueprints</groupId>
-                    <artifactId>blueprints-sail-graph</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.codehaus.groovy.maven</groupId>
-                    <artifactId>gmaven-plugin</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>jline</groupId>
-                    <artifactId>jline</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-		
+
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-spatial</artifactId>
+			<version>0.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.tinkerpop.gremlin</groupId>
+			<artifactId>gremlin-groovy</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.tinkerpop.blueprints</groupId>
+					<artifactId>blueprints-sail-graph</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.groovy.maven</groupId>
+					<artifactId>gmaven-plugin</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>jline</groupId>
+					<artifactId>jline</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
