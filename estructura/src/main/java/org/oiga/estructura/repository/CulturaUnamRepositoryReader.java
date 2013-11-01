@@ -9,15 +9,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
-public class CulturaUnamRepositoryReader implements RepositoryReader<Map>{
+public class CulturaUnamRepositoryReader implements RepositoryReader<Map<String,String>>{
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public List<Map> read(Document document) {
-		List<Map> contents = new ArrayList<Map>();
+	public List<Map<String,String>> read(Document document) {
+		List<Map<String,String>> contents = new ArrayList<>();
 		Elements divs = document.select("div[class=eventos]");
 		for (Element e : divs) {
-			Map obj=new LinkedHashMap();
+			Map<String,String> obj=new LinkedHashMap<>();
 
 
 			Elements titulo = e.select("div[class=eventos-titulo] div");

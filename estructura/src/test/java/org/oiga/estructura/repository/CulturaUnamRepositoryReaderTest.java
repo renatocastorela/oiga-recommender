@@ -35,7 +35,7 @@ public class CulturaUnamRepositoryReaderTest {
 
 	@Test
 	public void testParseHtmlDocument() {
-		List<Map> contents = reader.read(documment);
+		List<Map<String,String>> contents = reader.read(documment);
 		
 		assertNotNull(contents);
 		StringBuilder builder = new StringBuilder("\n");

@@ -14,16 +14,16 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CulturaUnamDateParser implements Parser<List<Interval>>{
+public class CulturaUnamDateParser{
 	private static Logger logger = LoggerFactory.getLogger(CulturaUnamDateParser.class);
-	private final String CU_REG_EXP = "(\\d{2}/\\d{2}/\\d{4}) de (\\d{2}:\\d{2}) a (\\d{2}:\\d{2})";
+	private static final String CU_REG_EXP = "(\\d{2}/\\d{2}/\\d{4}) de (\\d{2}:\\d{2}) a (\\d{2}:\\d{2})";
 	public boolean isParseable(String text){
 		/*FIXME: Evitar que se compile la regexp cada vez que invoca el metodo*/
 		Pattern pattern = Pattern.compile(CU_REG_EXP);
 		return pattern.matcher(text).find();
 	}
 	
-	public List<Interval> parse(String text){
+	public static List<Interval> parse(String text){
 		Pattern pattern = Pattern.compile(CU_REG_EXP);
 		DateTimeFormatter fechaFmt = DateTimeFormat.forPattern("dd/MM/yyyy");
 		DateTimeFormatter horaFmt = DateTimeFormat.forPattern("HH:mm");
