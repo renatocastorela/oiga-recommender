@@ -1,0 +1,19 @@
+/*
+ * Custom Navbar
+ *
+ */
+ body
+ { 
+ 	padding-top: 70px; 
+ }
+ .navbar
+ {
+ 	margin-bottom: 0px;
+ }
+ .display-none{
+ 	display: none;
+ }
+ 
+ 
+ 
+ 
