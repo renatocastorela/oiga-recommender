@@ -170,6 +170,7 @@
 			$("#map").click(function(e) {
 				$("#events-result > div").removeClass("panel-primary");
 			});
+			
 
 		}
 
@@ -197,7 +198,7 @@
 			// p.message : error message
 		}
 		/*Configuracion de la busqueda */
-		$("#search-bar").autocomplete({
+		$("#search-input").autocomplete({
 			source : function(request, response) {
 				$.getJSON("events/search/like/" + request.term, function(data) {
 					response($.map(data, function(item) {
@@ -212,6 +213,11 @@
 				console.debug(ui.item.value);
 				$.getJSON("events/search/exact/" + ui.item.value, load_events_on_map);
 			}
+		});
+		$("#search-btn").click(function(e){
+			var term = $("#search-input").val();
+			$.getJSON("events/search/like/"+term+"/", load_events_on_map);
+			return false;
 		});
 	</script>
   </body>
