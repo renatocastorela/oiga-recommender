@@ -15,9 +15,9 @@
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <form class="navbar-form navbar-left" role="search">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Eventos en mi Ciudad" id="search-bar">
+        <input type="text" class="form-control" placeholder="Eventos en mi Ciudad" id="search-input">
       </div>
-      <button type="submit" class="btn btn-default">Buscar</button>
+      <button type="submit" class="btn btn-default" id="search-btn">Buscar</button>
     </form>
   </div><!-- /.navbar-collapse -->
 </nav>
