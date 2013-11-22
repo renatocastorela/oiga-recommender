@@ -56,7 +56,7 @@ public class EventRepositoryTest {
 	@Test
 	public void test() {
 		System.out.println("Iniciando test");
-		String function = String.format(EventRepository.WITHIN_DISTANCE, "19.54", "-99.20", "35.0");
+		String function = String.format(EventRepository.WITHIN_DISTANCE, 19.54, -99.20, 35.0);
 		System.out.println("Func"+function);
 		Iterable<Event> result = eventRepository.getLocation(function);
 		
