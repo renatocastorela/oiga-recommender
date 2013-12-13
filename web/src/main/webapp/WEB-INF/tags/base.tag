@@ -1,21 +1,22 @@
 <%@tag description="Base Pages template" pageEncoding="UTF-8"%>
-<%@attribute name="header" fragment="true" %>
-<%@attribute name="footer" fragment="true" %>
+<%@attribute name="pageTitle" 	fragment="true" %>
+<%@attribute name="header" 	fragment="true" %>
+<%@attribute name="footer" 	fragment="true" %>
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Oiga Recommender - somethin </title>
+  	<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/cokie_60.png" />
+    <title>
+    	<jsp:invoke fragment="pageTitle" />
+    </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
   	<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  	<!-- Oiga 	-->
-  	<link href="${pageContext.request.contextPath}/resources/css/oiga.css" rel="stylesheet" media="screen">
-  	<link href="${pageContext.request.contextPath}/resources/css/map.css" rel="stylesheet" media="screen">
-  	<!-- Mapbox -->
   	<link href='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
-  	<!-- JQuery UI -->
+  	<!-- JQuery UI --> 
   	<link href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet' />
+	 
 	<!--[if lte IE 8]>
     <link href='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.ie.css' rel='stylesheet'>
   	<![endif]--> 
@@ -24,19 +25,24 @@
       <script src="../../assets/js/html5shiv.js"></script>
       <script src="../../assets/js/respond.min.js"></script>
     <![endif]-->
+        <!-- Oiga 	-->
+  	<link href="${pageContext.request.contextPath}/resources/css/oiga.css" rel="stylesheet" media="screen">
+  	<!-- Mapbox -->
+  	<link href="${pageContext.request.contextPath}/resources/css/map.css" rel="stylesheet" media="screen">
     <script src='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
   </head>
   <body>
     <jsp:include page="/WEB-INF/layouts/navbar.jsp" />
     <jsp:doBody />
+
     <!-- jQuery -->
     <script src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 	<script src='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
 	<script src="${pageContext.request.contextPath}/resources/js/geoPosition.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/geoPositionSimulator.js"></script>
-	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script type='text/javascript'>
 			var map;
 	     

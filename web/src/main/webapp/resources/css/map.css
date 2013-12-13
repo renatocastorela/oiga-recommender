@@ -13,7 +13,7 @@
     	top:0;
     	left:0;
     	right:0;
-    	margin-top:50px;
+    	margin-top:62px;
 }
 
 .map {
@@ -28,7 +28,7 @@
 	width:400px;
     position: absolute;
     right:0px;
-    top:50px;
+    top:70px;
     padding:5px;
     max-height:3600px;
     z-index: 1000;
