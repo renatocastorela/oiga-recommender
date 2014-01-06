@@ -32,45 +32,39 @@
 		</form>
 		<ul class="nav navbar-nav navbar-right">
 			<!-- Anonymous -->
-			<sec:authorize access="isAnonymous()">
-			<!-- 
-				<li>
-				<div >
-					<button type="button" class="btn btn-primary navbar-btn btn-lg" data-toggle="dropdown">
-						<spring:message code="label.signup" />
-					</button>
-					<ul class="dropdown-menu">
-						<li><a href="#">Action</a></li>
-    					<li><a href="#">Another action</a></li>
-  					</ul>
-				</div>
-					</li>
-					-->
+				<sec:authorize access="isAnonymous()">
 					<li>
-				
-					<button type="button" class="btn-pink navbar-btn btn-lg" data-toggle="modal" data-target="#myModal">
-						<spring:message code="label.login" />
-					</button>
-					
-				</li>
-			</sec:authorize>
-			<!-- Authenticated -->
+						<button type="button" class="btn btn-primary navbar-btn btn-lg"
+							data-toggle="modal" data-target="#signup-modal">
+							<spring:message code="label.signup" />
+						</button>
+					</li>
+					<li>
+						<button type="button" class="btn-pink navbar-btn btn-lg"
+							data-toggle="modal" data-target="#signin-modal">
+							<spring:message code="label.login" />
+						</button>
+					</li>
+				</sec:authorize>
+				<!-- Authenticated -->
 			<sec:authorize access="isAuthenticated()">
 				<li>
-					<sec:authentication property="principal"/>
+					<a href="#" >
+						<sec:authentication property="principal.username"/>
+						<img alt="User profile" src="<sec:authentication property="principal.imageUrl"/>" class="img-rounded" style="height: 35px;s" >
+					</a>
 					
 				</li>
 				<li>
-					<a href="<c:url value="/signout" />">Sign Out</a>
-
-					</li>
+					<a href="<c:url value="/signout" />">Cerrar sesion</a>
+				</li>
 			</sec:authorize>
 		</ul>
 	</div>
 	</div>
 </nav>
-<!-- Login modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+<!-- Signin modal -->
+<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -80,18 +74,45 @@
 				<h4 class="modal-title" id="myModalLabel">Iniciar sesion</h4>
 			</div>
 			<div class="modal-body">
-				Inicia sesión con tu red social
-				<div>
-					<a class="btn btn-facebook btn-connect" href="#">Facebook</a>
-				</div>
+				<p>Inicia sesión con tu red social<p>
+				<form action="${pageContext.request.contextPath}/signin/facebook" method="POST">
+  					 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+  					 <input type="hidden" name="scope" value="email" />
+  					<button type="submit" class="btn btn-facebook btn-connect">
+  						Facebook
+  					</button>
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
+<!-- Signup modal -->
+<div class="modal fade" id="signup-modal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Registrarse</h4>
+			</div>
+			<div class="modal-body">
+				<p class="text-muted">Registrarse usando tu red social<p>
+				<form action="${pageContext.request.contextPath}/signin/facebook" method="POST">
+  					 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+  					 <input type="hidden" name="scope" value="email" />
+  					<button type="submit" class="btn btn-facebook btn-connect">
+  						Facebook
+  					</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>

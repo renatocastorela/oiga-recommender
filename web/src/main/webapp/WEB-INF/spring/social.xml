@@ -37,5 +37,9 @@
 	
 	<bean id="disconnectController" class="org.springframework.social.facebook.web.DisconnectController" 
 		c:_0-ref="usersConnectionRepository" c:_1="${facebook.app.secret}" />
-		
+	<!-- Foursquare -->
+	<bean id="foursquareApi" class="fi.foyt.foursquare.api.FoursquareApi" 
+		c:_0="${foursquare.app.clientid}" 
+		c:_1="${foursquare.app.clientsecret}" 
+		c:_2="${foursquare.app.redirecturl}" />	
 </beans>

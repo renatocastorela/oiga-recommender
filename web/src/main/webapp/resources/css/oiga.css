@@ -36,7 +36,6 @@ body
     text-align: center;
     border-radius: 3px 3px 3px 3px;
     padding: 15px 15px 15px 60px;
-    float: left;
 } 
 /*
 Facebook-login
@@ -89,4 +88,16 @@ Pink button
 	background: -moz-linear-gradient(top, #c93764, #ea4c89);
 	background: -ms-linear-gradient(top, #c93764, #ea4c89);
 	background: -webkit-linear-gradient(top, #c93764, #ea4c89);
- } 
+ }
+ /**
+  *Maps
+  */
+  #map_container{
+  	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    height: 260px;
+    position: relative;
+    width: 300px;
+    z-index: 1;
+}
+  } 

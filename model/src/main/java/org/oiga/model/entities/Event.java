@@ -1,6 +1,7 @@
 package org.oiga.model.entities;
 
 import java.util.Date;
+
 import java.util.List;
 
 import org.springframework.data.neo4j.annotation.Fetch;
@@ -9,6 +10,7 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.support.index.IndexType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @NodeEntity
 public class Event {
@@ -22,13 +24,16 @@ public class Event {
 	private String url;
 	private String host;
 	private String location;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date startDate;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date endDate;
 	private Date updatedTime = new Date();
 	@RelatedTo(type="PERFORMED")
 	@Fetch
 	private SimpleVenue venue;
 	@RelatedTo(type = "CATEGORIZED")
+	@Fetch	
 	private EventCategory category;
 	private List<String> tags;
 	private List <String> hours;

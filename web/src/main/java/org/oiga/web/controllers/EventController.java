@@ -10,7 +10,9 @@ import org.oiga.model.repositories.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/events")
 public class EventController {
 	static Logger logger = LoggerFactory.getLogger(EventController.class);
+	private static final int PAGE_SIZE = 25;
 	
 	@Autowired
 	private EventRepository eventRepository;
@@ -94,4 +97,15 @@ public class EventController {
 		return events;
 		
 	}
+
+	@RequestMapping( value="recommend/navigation/{pageNumber}", method=RequestMethod.GET)
+	public  @ResponseBody List<Event> recommendationByNavigation(@PathVariable int pageNumber)
+	{
+		List<Event> events = new ArrayList<Event>();
+		Pageable page = new PageRequest(pageNumber, PAGE_SIZE);
+		Page<Event> result = eventRepository.findAll(page);
+		events = result.getContent();
+		return events;
+	}
+	
 }

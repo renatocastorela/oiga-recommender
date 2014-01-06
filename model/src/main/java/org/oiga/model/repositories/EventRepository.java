@@ -2,6 +2,7 @@ package org.oiga.model.repositories;
 
 
 import org.oiga.model.entities.Event;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
@@ -15,6 +16,11 @@ public interface EventRepository extends GraphRepository<Event>{
 			+"MATCH e-[:PERFORMED]->(v)-[:IS_LOCATED]->a "
 			+"RETURN e" )
 	Iterable<Event> getLocation(String function);
+	@Query("START e=node(*) "
+			+"MATCH e-[:CATEGORIZED]->v "
+			+"WHERE v.name={0} "
+			+"RETURN e ")
+	Iterable<Event> findByCategory(String category);
 	Page<Event> findByNameLike(String name, Pageable page);
 	EndResult<Event> findAllByName(String name);
 }

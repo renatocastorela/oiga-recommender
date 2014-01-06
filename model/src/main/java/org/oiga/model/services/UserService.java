@@ -27,6 +27,11 @@ public class UserService {
 		logger.debug("Persisting new user with email: {} ", user.getEmail());
 		return userRepository.save(user);
 	}
+	
+	public User findByUsername(String facebookUsername){
+		User user = userRepository.findByfacebookUsername(facebookUsername);
+		return user;
+	}
 
 	private boolean emailExist(String email) {
 		User user = null;

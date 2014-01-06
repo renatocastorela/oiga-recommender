@@ -20,10 +20,9 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 	public String execute(Connection<?> connection) {
 		String userName = null;
 		try{
-			UserProfile profile = connection.fetchUserProfile();
-			userName = profile.getUsername();
 			User user = UserUtils.prefillUser(connection);
-			logger.debug("Signin up user '{}' ", user.getFacebookUsername() );
+			userName = user.getFacebookUsername();
+			logger.debug("Usuario conectado : {} ", user.getFacebookUsername() );
         	userService.registerNewUser(user);
         }catch(DuplicateUserException e){
         	  logger.error("User already registered : "+e.getMessage());

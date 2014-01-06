@@ -19,7 +19,7 @@ public class SimpleSocialUsersDetailService implements SocialUserDetailsService 
 	public SimpleSocialUsersDetailService(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
-
+	
 	@Override
 	public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException, DataAccessException {
 		logger.debug("Cargando al usuario '"+userId+"' del repositorio local");

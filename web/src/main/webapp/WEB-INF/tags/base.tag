@@ -30,14 +30,15 @@
   	<!-- Mapbox -->
   	<link href="${pageContext.request.contextPath}/resources/css/map.css" rel="stylesheet" media="screen">
     <script src='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
+    <!-- jQuery -->
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   </head>
   <body>
     <jsp:include page="/WEB-INF/layouts/navbar.jsp" />
     <jsp:doBody />
 
-    <!-- jQuery -->
-    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.js"></script>
-	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
+     
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 	<script src='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
