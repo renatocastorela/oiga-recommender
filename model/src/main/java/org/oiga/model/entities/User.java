@@ -1,10 +1,13 @@
 package org.oiga.model.entities;
 
+import java.util.Set;
+
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.RelatedToVia;
 
 @NodeEntity
 public class User {
@@ -23,14 +26,13 @@ public class User {
 	@RelatedTo(type = "HAS_ROLE")
 	@Fetch
 	private Role role;
-
+	@RelatedToVia(type="INTERACTS")
+	private Set<Interaction> interactions;
 	public User() {
 	}
-	
 	public String getFacebookUsername() {
 		return facebookUsername;
 	}
-
 	public void setFacebookUsername(String facebookUsername) {
 		this.facebookUsername = facebookUsername;
 	}
@@ -114,7 +116,12 @@ public class User {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-	
+	public Set<Interaction> getInteractions() {
+		return interactions;
+	}
+	public void setInteractions(Set<Interaction> interactions) {
+		this.interactions = interactions;
+	}
 	public static class Builder {
 		private String facebookUsername;
 		private String facebookUid;

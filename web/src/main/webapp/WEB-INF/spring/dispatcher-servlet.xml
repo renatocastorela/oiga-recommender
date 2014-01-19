@@ -14,7 +14,10 @@
 	<import resource="social.xml" />
 	
 	<context:component-scan base-package="org.oiga.web.controllers" />
+	<context:component-scan base-package="org.oiga.web.listeners" />
+	<context:component-scan base-package="org.oiga.web.beans" />
 	<context:component-scan base-package="org.oiga.model.services" />
+	
 	<context:property-placeholder location="classpath:application.properties" />
 	<mvc:annotation-driven />
 	<mvc:resources mapping="/resources/**" location="/resources/" />

@@ -42,7 +42,7 @@
 	    </div>
      </div>
       
-      <script>var ctx = "${pageContext.request.contextPath}"; </script>
+
       <script type="text/javascript" >
       	var foursquare_controller_url = ctx + "/venues/" + $("#foursquareId").val();
 		console.debug("Venue request "+foursquare_controller_url);

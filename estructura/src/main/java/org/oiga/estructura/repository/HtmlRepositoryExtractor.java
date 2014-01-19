@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.Connection.Method;
 import org.jsoup.nodes.Document;
 
+@Deprecated
 public class HtmlRepositoryExtractor implements RepositoryExtractor{
 	private String url;
 	private Method method = Method.GET;

@@ -4,6 +4,7 @@
 <%@ taglib prefix="facebook" uri="http://www.springframework.org/spring-social/facebook/tags" %>
 <%@ taglib prefix="social" uri="http://www.springframework.org/spring-social/social/tags" %>
 
+
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="container">
 	
@@ -21,14 +22,15 @@
 	</div>
 	<!-- Navbar collapse -->
 	<div class="collapse navbar-collapse" id="navbar-content">
-		<form class="navbar-form navbar-left" role="search">
+		<form class="navbar-form navbar-left" role="search" action="${pageContext.request.contextPath}/events/explore" id="search-form">
 			<div class="form-group">
 				<input type="text" class="form-control"
-					placeholder="Eventos en mi Ciudad" id="search-input">
+					placeholder="Eventos en mi ciudad" id="search-input" name="q" >
 			</div>
+			<input type="hidden" name="ln" />
+			<input type="hidden" name="lt" />
 			<button type="submit" class="btn btn-pistache btn-lg "
 				id="search-btn">Buscar</button>
-
 		</form>
 		<ul class="nav navbar-nav navbar-right">
 			<!-- Anonymous -->
@@ -116,3 +118,28 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	/*Busqueda Global*/
+ 	console.debug("config autocomplete");
+	$("input[name=lt]").val(  $.cookie("location").latitude );
+	$("input[name=ln]").val(  $.cookie("location").longitude );
+$("#search-input").autocomplete({
+	source : function(request, response) {
+		$.getJSON(ctx+"/events/search/like",
+				{
+					q : request.term,
+					lt : $.cookie("location").latitude,
+					ln : $.cookie("location").longitude
+				},
+				function(data) {
+					response($.map(data, function(item) {
+					return {
+						label : item.name,
+						value : item.name
+					}
+				}))
+			})
+		}
+});
+</script>

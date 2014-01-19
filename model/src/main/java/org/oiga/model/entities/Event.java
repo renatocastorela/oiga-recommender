@@ -1,20 +1,20 @@
 package org.oiga.model.entities;
 
 import java.util.Date;
-
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.RelatedToVia;
 import org.springframework.data.neo4j.support.index.IndexType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @NodeEntity
 public class Event {
-	
 	@GraphId
 	private Long nodeId;
 	@Indexed(indexType=IndexType.FULLTEXT, indexName="event_name")
@@ -23,7 +23,12 @@ public class Event {
 	private String description;
 	private String url;
 	private String host;
+	private String hoursDetails;
 	private String location;
+	private String locationAdress;
+	private String picture;
+	private String audience;
+	private String ticketPrices;
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date startDate;
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -32,12 +37,48 @@ public class Event {
 	@RelatedTo(type="PERFORMED")
 	@Fetch
 	private SimpleVenue venue;
+	@RelatedToVia(type="INTERACTS")
+	private Set<Interaction> interactions;
+	@RelatedTo(type = "SOURCED")
+	@Fetch	
+	private Repository repository;
+	private List<String> tags;
+	private List<String> otherDetails;
+	private List <String> hours;
 	@RelatedTo(type = "CATEGORIZED")
 	@Fetch	
-	private EventCategory category;
-	private List<String> tags;
-	private List <String> hours;
+	private List<EventCategory> categories;
 	
+	public String getPicture() {
+		return picture;
+	}
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+	public String getAudience() {
+		return audience;
+	}
+	public void setAudience(String audience) {
+		this.audience = audience;
+	}
+	public String getTicketPrices() {
+		return ticketPrices;
+	}
+	public void setTicketPrices(String ticketPrices) {
+		this.ticketPrices = ticketPrices;
+	}
+	public Set<Interaction> getInteractions() {
+		return interactions;
+	}
+	public void setInteractions(Set<Interaction> interactions) {
+		this.interactions = interactions;
+	}
+	public List<String> getOtherDetails() {
+		return otherDetails;
+	}
+	public void setOtherDetails(List<String> otherDetails) {
+		this.otherDetails = otherDetails;
+	}
 	public Long getNodeId() {
 		return nodeId;
 	}
@@ -68,6 +109,18 @@ public class Event {
 	public void setHost(String host) {
 		this.host = host;
 	}
+	public String getLocationAdress() {
+		return locationAdress;
+	}
+	public void setLocationAdress(String locationAdress) {
+		this.locationAdress = locationAdress;
+	}
+	public String getHoursDetails() {
+		return hoursDetails;
+	}
+	public void setHoursDetails(String hoursDetails) {
+		this.hoursDetails = hoursDetails;
+	}
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -92,11 +145,11 @@ public class Event {
 	public void setVenue(SimpleVenue venue) {
 		this.venue = venue;
 	}
-	public EventCategory getCategory() {
-		return category;
+	public List<EventCategory> getCategories() {
+		return categories;
 	}
-	public void setCategory(EventCategory category) {
-		this.category = category;
+	public void setCategories(List<EventCategory> categories) {
+		this.categories = categories;
 	}
 	public List<String> getTags() {
 		return tags;
@@ -116,5 +169,10 @@ public class Event {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+	public Repository getRepository() {
+		return repository;
+	}
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
 }

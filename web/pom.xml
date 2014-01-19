@@ -184,6 +184,7 @@
 	  <groupId>org.eclipse.jetty</groupId>
 	  <artifactId>jetty-maven-plugin</artifactId>
 	  <configuration>
+	  <scanIntervalSeconds>2</scanIntervalSeconds>
 	    <webApp>
 	      <contextPath>/web</contextPath>
 	    </webApp>

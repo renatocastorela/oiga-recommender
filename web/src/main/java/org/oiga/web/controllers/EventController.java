@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.oiga.model.entities.Event;
 import org.oiga.model.repositories.EventRepository;
+import org.oiga.web.utils.QueryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +19,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -44,15 +50,17 @@ public class EventController {
 		
 	}
 	
-	@RequestMapping( value="search/like/{query}", method=RequestMethod.GET)
-	public @ResponseBody  List<Event> likeSearch(@PathVariable String query)
+	@RequestMapping( value="search/like", method=RequestMethod.GET)
+	public @ResponseBody  List<Event> likeSearch(@RequestParam(value="q", required=false) String query,
+			@RequestParam(value="lt") double lt,
+			@RequestParam(value="ln") double ln,
+			@RequestParam(value="radio", defaultValue="25.0") double radio)
 	{
 		List<Event> events = new ArrayList<Event>();
 		StringBuilder expandedQuery = new StringBuilder();
 		Iterator<String> terms = Arrays.asList(query.split(" ")).iterator();
-	
 		while(terms.hasNext()){
-			String term = terms.next();
+			String term = QueryUtils.escapeLuceneString( terms.next() );
 			expandedQuery.append("name:").append(term);
 			if(terms.hasNext() == false){
 				expandedQuery.append("*");
@@ -60,9 +68,9 @@ public class EventController {
 				expandedQuery.append(" AND ");
 			}
 		}
-		logger.debug("Query: "+expandedQuery.toString());
-		
-		Iterable<Event> result = eventRepository.findAllByQuery("name", expandedQuery.toString());
+		String function = String.format(EventRepository.WITHIN_DISTANCE, lt, ln, radio);
+		logger.debug("Query:"+expandedQuery.toString());
+		Iterable<Event> result = eventRepository.findAllByQueryAndLocation(expandedQuery.toString(), function);
 		for(Event e:result)
 		{
 			events.add(e);
@@ -106,6 +114,21 @@ public class EventController {
 		Page<Event> result = eventRepository.findAll(page);
 		events = result.getContent();
 		return events;
+	}
+	
+	
+	
+	@RequestMapping( value="explore", method=RequestMethod.GET)
+	public  String explore( @RequestParam(value="query", required=false) String query , Map<String, Object> model)
+	{
+		return "explore";
+	}
+	
+	@RequestMapping(value = "details/{nodeId}", method = RequestMethod.GET)
+	public String eventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
+		Event event = eventRepository.findOne(nodeId);
+		model.put("event", event);
+		return "detalles";
 	}
 	
 }

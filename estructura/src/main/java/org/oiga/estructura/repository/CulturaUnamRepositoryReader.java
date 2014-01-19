@@ -8,7 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
+@Deprecated
 public class CulturaUnamRepositoryReader implements RepositoryReader<Map<String,String>>{
 
 	@Override

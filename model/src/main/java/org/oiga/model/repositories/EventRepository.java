@@ -16,6 +16,11 @@ public interface EventRepository extends GraphRepository<Event>{
 			+"MATCH e-[:PERFORMED]->(v)-[:IS_LOCATED]->a "
 			+"RETURN e" )
 	Iterable<Event> getLocation(String function);
+	@Query(
+			"START n = node:event_name({0}), a=node:geo_location({1}) "
+			+"MATCH n-[:PERFORMED]->(v)-[:IS_LOCATED]->a "
+			+"RETURN n" )
+	Iterable<Event> findAllByQueryAndLocation(String luceneQuery, String location);
 	@Query("START e=node(*) "
 			+"MATCH e-[:CATEGORIZED]->v "
 			+"WHERE v.name={0} "
