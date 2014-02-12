@@ -46,6 +46,7 @@ public class EventController {
 		for(Event e:result){
 			events.add(e);
 		}
+		
 		return events;
 		
 	}

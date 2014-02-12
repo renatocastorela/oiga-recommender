@@ -10,7 +10,7 @@
 	<properties>
 		<spring.version>3.2.4.RELEASE</spring.version>
 		<jackson.version>2.3.1</jackson.version>
-		<neo4j.version>1.9.4</neo4j.version>
+		<neo4j.version>2.0.1</neo4j.version>
 		<spring-data-neo4j.version>2.3.1.RELEASE</spring-data-neo4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -20,6 +20,17 @@
 		<repository>
 			<id>neo4j-public-repository</id>
 			<url>http://m2.neo4j.org/content/repositories/releases/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<name>Publicly available Maven 2 repository for Neo4j</name>
+		</repository>
+		<repository>
+			<id>neo4j-public-repository-snapshots</id>
+			<url>http://m2.neo4j.org/content/repositories/snapshots/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -79,12 +90,13 @@
 			<artifactId>spring-data-neo4j</artifactId>
 			<version>${spring-data-neo4j.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-neo4j-rest</artifactId>
 			<version>${spring-data-neo4j.version}</version>
 		</dependency>
-
+ -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -172,18 +184,12 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- Jersey Client -->
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>2.3.1</version>
-		</dependency>
-
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -208,20 +214,41 @@
 		</dependency>
 		<!-- Jackson -->
 		<dependency>
-  			<groupId>com.fasterxml.jackson.core</groupId>
-  			<artifactId>jackson-core</artifactId>
-  			<version>${jackson.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
-  			<groupId>com.fasterxml.jackson.core</groupId>
-  			<artifactId>jackson-databind</artifactId>
-  			<version>${jackson.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
-  			<!-- note: typically only ".0" patch version exists for core annotations -->
-  			<groupId>com.fasterxml.jackson.core</groupId>
-  			<artifactId>jackson-annotations</artifactId>
-  			<version>2.3.0</version>
+			<!-- note: typically only ".0" patch version exists for core annotations -->
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<!-- Lucene -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>4.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>4.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>16.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.0</version>
 		</dependency>
 	</dependencies>
 	<build>

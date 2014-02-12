@@ -14,22 +14,35 @@
 	    		<!--  Detalles ${event.name } ${event.venue.foursquareId}-->
 	    		<h3 class="text-primary">
 	    			<fmt:formatDate value="${event.startDate}"
-								pattern="EEE dd MMM yyyy" /> -
+								 /> -
 							<fmt:formatDate value="${event.endDate}"
-								pattern="EEE dd MMM yyyy" />
+								/>
 	    		</h3>
 	    		<h1> ${event.name} </h1>
+	    		
 	    		<dl >
+					<dt>Fuente</dt>
+  					<dd> <a href="${event.repository.url}" >${event.repository.name}</a> </dd>
 					<dt>Organiza</dt>
   					<dd> ${event.host}<dd>
   					<dt>Recinto</dt>
   					<dd>${event.location}<dd>
   					<dt>Descripcion</dt>
   					<dd>${event.description}</dd>
-  					<dt>Tipo</dt>
+   					<dt>Tipo</dt>
   					<dd>${event.category.name}</dd>
-  					<dt>Fuente</dt>
-  					<dd> <a href="${event.url}" >${event.url}</a> </dd>
+  					<dt>Publico</dt>
+  					<dd>${event.audience}</dd>
+  					<dt>Precio</dt>
+  					<dd>${event.ticketPrices}</dd>
+  					<dt>Otros detalles</dt>
+  					<dd>
+  						<ul>
+						<c:forEach items="${event.otherDetails}" var="o">
+							<li>${o}</li>  
+						</c:forEach>
+						</ul> 
+  					</dd>
 				</dl>
 	    		<input type="hidden" value="${ event.venue.foursquareId}" id="foursquareId"/>
 	    	</div>
@@ -38,6 +51,10 @@
 				<address id="adress">
 								
 				</address>
+				<hr>
+				<c:forEach items="${event.tags}" var="t">
+					<span class="label label-default"> <c:out value="${t.keyword }"></c:out></span>  
+				</c:forEach>
 			</div>
 	    </div>
      </div>

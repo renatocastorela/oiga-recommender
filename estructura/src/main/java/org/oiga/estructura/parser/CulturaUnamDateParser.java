@@ -42,5 +42,13 @@ public class CulturaUnamDateParser{
 		}
 		return fechas;
 	}
+	
+	public static List<String> extractHours(List<Interval> intervalos){
+		List<String> hours = new ArrayList<>();
+		for(Interval s:intervalos){
+			hours.add(s.toString());
+		}
+		return hours;
+	}
 
 }

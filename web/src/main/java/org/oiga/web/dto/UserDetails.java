@@ -1,9 +1,9 @@
 package org.oiga.web.dto;
 
+
 import java.util.Collection;
 import java.util.Set;
 
-import org.apache.tools.ant.util.facade.FacadeTaskHelper;
 import org.oiga.model.entities.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.social.security.SocialUser;

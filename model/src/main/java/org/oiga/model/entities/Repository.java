@@ -10,6 +10,14 @@ public class Repository {
 	@Indexed(indexName="repository_name", unique=true)
 	private String name;
 	private String url;
+	private String logo;
+	
+	public String getLogo() {
+		return logo;
+	}
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
 	public Long getNodeId() {
 		return nodeId;
 	}

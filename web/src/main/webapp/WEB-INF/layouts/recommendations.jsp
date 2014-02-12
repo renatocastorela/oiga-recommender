@@ -19,9 +19,11 @@
           </div>
            <div class="row">
            <c:if test="${ not empty events }">
+           
            <c:forEach var="ev" items="${events}"> 
-           		<div class="col-6 col-sm-6 col-lg-4">
+           		<div class="col-6 col-sm-6 col-lg-4" >
            		<div class="panel panel-danger">
+           		
            		<div class="panel-heading">${ev.name}</div>
   					<div class="panel-body">
   						<dl>
@@ -31,17 +33,15 @@
   							<dd>${ev.location}<dd>
   							<dt>Fecha</dt>
   							<dd>
-  							<fmt:formatDate value="${ev.startDate}"
-								pattern="yyyy-MM-dd " /> 
+  							Del <fmt:formatDate value="${ev.startDate}"
+								pattern="yyyy-MM-dd " /> al  
 							<fmt:formatDate value="${ev.endDate}"
 								pattern="yyyy-MM-dd " />
 							<dd>
 							<dt>Descripcion</dt>
   							<dd>${ev.description}</dd>
   							<dt>Tipo</dt>
-  							<dd>${ev.category.name}</dd>
-  							<dt>Fuente</dt>
-  							<dd> <a href="${ev.url}" >${ev.url}</a> </dd>
+  			 				<dd>${ev.category.name}</dd>
   						</dl>
   						<a class="btn btn-default" href="${pageContext.request.contextPath}/details/${ev.nodeId}" role="button">Ver detalles &raquo;</a>
   					</div>
@@ -49,6 +49,7 @@
               
             </div><!--/span-->
            </c:forEach>
+           
            </c:if>
            </div>
         </div>
@@ -56,9 +57,11 @@
           <span class="label label-default">Categorias</span>
           <div class="list-group">
           <a href="${pageContext.request.contextPath}/" class="list-group-item <c:if test="${ empty active }"> active </c:if> ">Todos</a>
+           
           <c:forEach var="c" items="${categories }">
           	<a href="${pageContext.request.contextPath}/filter/${c.name}" class="list-group-item <c:if test="${ active == c.name }"> active </c:if>" >${ c.name} <span class="badge">${c.count}</span></a>
           </c:forEach>
+          
           </div>
         </div>
       

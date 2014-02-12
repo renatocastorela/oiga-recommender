@@ -1,19 +1,23 @@
 package org.oiga.estructura.model.beans;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Extraccion {
 	private String urlRepositorio;
 	private String nombreRepositorio;
 	private String nombreArchivo;
+	private String logoRepositorio;
 	private Date fechaExtraccion;
-	private List<Documento> documentos;
 	
-	public List<Documento> getDocumentos() {
+	private Map<String, Documento> documentos = new HashMap<String, Documento>();
+	
+	public Map<String, Documento> getDocumentos() {
 		return documentos;
 	}
-	public void setDocumentos(List<Documento> documentos) {
+	public void setDocumentos(Map<String, Documento> documentos) {
 		this.documentos = documentos;
 	}
 	public String getUrlRepositorio() {
@@ -39,5 +43,11 @@ public class Extraccion {
 	}
 	public void setNombreArchivo(String nombreArchivo) {
 		this.nombreArchivo = nombreArchivo;
+	}
+	public String getLogoRepositorio() {
+		return logoRepositorio;
+	}
+	public void setLogoRepositorio(String logoRepositorio) {
+		this.logoRepositorio = logoRepositorio;
 	}
 }

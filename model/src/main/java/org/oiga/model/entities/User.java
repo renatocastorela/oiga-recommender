@@ -1,7 +1,9 @@
 package org.oiga.model.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -26,13 +28,17 @@ public class User {
 	@RelatedTo(type = "HAS_ROLE")
 	@Fetch
 	private Role role;
-	@RelatedToVia(type="INTERACTS")
-	private Set<Interaction> interactions;
+	@RelatedToVia(type = "INTERACTS", direction=Direction.BOTH)
+	@Fetch
+	private Set<Interaction> interactions = new HashSet<Interaction>();
+
 	public User() {
 	}
+
 	public String getFacebookUsername() {
 		return facebookUsername;
 	}
+
 	public void setFacebookUsername(String facebookUsername) {
 		this.facebookUsername = facebookUsername;
 	}
@@ -116,13 +122,17 @@ public class User {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+
 	public Set<Interaction> getInteractions() {
 		return interactions;
 	}
+
 	public void setInteractions(Set<Interaction> interactions) {
 		this.interactions = interactions;
 	}
+
 	public static class Builder {
+		private Long nodeId;
 		private String facebookUsername;
 		private String facebookUid;
 		private String facebookThirdPartyId;
@@ -131,7 +141,14 @@ public class User {
 		private String lastName;
 		private String password;
 		private String signInProvider;
+		private String imageUrl;
 		private Role role;
+		private Set<Interaction> interactions;
+
+		public Builder nodeId(Long nodeId) {
+			this.nodeId = nodeId;
+			return this;
+		}
 
 		public Builder facebookUsername(String facebookUsername) {
 			this.facebookUsername = facebookUsername;
@@ -173,8 +190,18 @@ public class User {
 			return this;
 		}
 
+		public Builder imageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
+			return this;
+		}
+
 		public Builder role(Role role) {
 			this.role = role;
+			return this;
+		}
+
+		public Builder interactions(Set<Interaction> interactions) {
+			this.interactions = interactions;
 			return this;
 		}
 
@@ -184,6 +211,7 @@ public class User {
 	}
 
 	private User(Builder builder) {
+		this.nodeId = builder.nodeId;
 		this.facebookUsername = builder.facebookUsername;
 		this.facebookUid = builder.facebookUid;
 		this.facebookThirdPartyId = builder.facebookThirdPartyId;
@@ -192,9 +220,8 @@ public class User {
 		this.lastName = builder.lastName;
 		this.password = builder.password;
 		this.signInProvider = builder.signInProvider;
+		this.imageUrl = builder.imageUrl;
 		this.role = builder.role;
+		this.interactions = builder.interactions;
 	}
-
-
-	
 }

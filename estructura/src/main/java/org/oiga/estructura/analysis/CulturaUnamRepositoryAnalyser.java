@@ -59,14 +59,13 @@ public class CulturaUnamRepositoryAnalyser implements AnalysisEngine<Event>{
 			ec.setName(d.get("tipo-evento"));
 			ec.setIcon("http://");
 			e.setName(d.get("titulo"));
-			e.setCategory(ec);
+			//e.setCategory(ec);
 			/*FIXME: quitar acento de descripcion*/
 			e.setDescription(d.get("descripción"));
 			e.setHost(d.get("organiza"));
 			e.setVenue(sv);
-			e.setTags(Arrays.asList(new String[]{"cultura","UNAM", ec.getName()}));
+//			e.setTags(Arrays.asList(new String[]{"cultura","UNAM", ec.getName()}));
 			e.setUrl("http://www.cultura.unam.mx/");
-			
 			eventos.add(e);
 		}
 		logger.info("Se analizaron '"+eventos.size()+"' eventos");

@@ -3,8 +3,17 @@ package org.oiga.vertex.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.oiga.vertex.credentials.FoursquareApiCredential;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +29,7 @@ public class FoursquareVenueService implements VenueService<CompactVenue> {
 	
 	private FoursquareApiCredential credential;
 	private FoursquareApi api;
-	
+	private ObjectMapper mapper = new ObjectMapper();
 	public FoursquareVenueService() {
 		super();
 		init();
@@ -31,12 +40,66 @@ public class FoursquareVenueService implements VenueService<CompactVenue> {
 		api = new FoursquareApi(credential.getClientId(), credential.getClientSecret(), "");
 	}
 	
-
+	private JsonNode exploreOneByName(String name, String near){
+		Client client = ClientBuilder.newClient().register(JacksonFeature.class);
+		JsonNode venue  = null;
+		String result;
+		try {
+			result = client.target("https://api.foursquare.com/v2/").path("venues/explore")
+					.queryParam("near", near)
+					.queryParam("intent", "browse")
+					.queryParam("query", name)
+					.queryParam("client_id", credential.getClientId())
+					.queryParam("client_secret", credential.getClientSecret())
+					.queryParam("v", credential.getVersion())
+					.request(MediaType.APPLICATION_JSON_TYPE).get(String.class);
+			JsonNode root = mapper.readTree(result);
+			venue = root.path("response").path("groups").get(0).path("items").get(0).get("venue");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return venue;
+		
+	}
+	
+	public String[] exploreVenueName(String name, String near){
+		JsonNode v = exploreOneByName(name, near);
+		if(v == null){ throw new RuntimeException("Venue no encontrada!	");}
+		JsonNode l = v.get("location");
+		String[] r = new String[10];
+		try{
+			r[0] = v.path("name").asText();
+			r[1] = v.path("id").asText();
+			r[2] = l.path("address").asText();
+			r[3] = l.path("crossStreet").asText();
+			r[4] = l.path("city").asText();
+			r[5] = l.path("state").asText();
+			r[6] = l.path("postalCode").asText();
+			r[7] = l.path("country").asText();
+			r[8] = l.path("lat").asText();
+			r[9] = l.path("lng").asText();
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+		return r;
+	}
+	
 	public List<CompactVenue> findByName(String name, String near){
 		List<CompactVenue> venues = new ArrayList<>();
 		try {
 			logger.debug("Looking for.. "+name);
-			Result<VenuesSearchResult> result = api.venuesSearch(near, name, 1, null, null, null, null, null);
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("near", near);
+			params.put("query", name);
+			params.put("intent", "browse");
+			//params.put("radius", "100000");
+			Result<VenuesSearchResult> result = api.venuesSearch(params);
+			
+			//Result<VenuesSearchResult> result = api.venuesExplore(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)(near, name, 1, null, null, null, null, null);
+			CompactVenue[] v= result.getResult().getVenues();
+			System.out.println(">"+v[0].getName());
+			System.out.print("Len: "+result.getResult().getVenues().length);
 			if(result.getMeta().getCode() == 200){
 				logger.debug("Where found "+result.getResult().getVenues().length+" venues.");
 				venues.addAll(Arrays.asList(result.getResult().getVenues()));
@@ -48,7 +111,6 @@ public class FoursquareVenueService implements VenueService<CompactVenue> {
 				logger.error(error);
 				throw new RuntimeException(error);
 			}
-			result.getResult();
 		}catch(ArrayIndexOutOfBoundsException e){
 			throw new RuntimeException("Venue not found");
 		}

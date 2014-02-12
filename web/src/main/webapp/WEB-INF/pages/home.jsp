@@ -7,6 +7,6 @@
 		<spring:message code="label.homepage.title" />		
 	</jsp:attribute>
 	<jsp:body>
-      <jsp:include page="/WEB-INF/layouts/recommendations.jsp"/>
+       <jsp:include page="/WEB-INF/layouts/recommendations.jsp"/> 
 	</jsp:body>
 </l:base>
