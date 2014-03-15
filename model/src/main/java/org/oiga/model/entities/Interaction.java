@@ -16,6 +16,7 @@ public class Interaction {
     private Long    nodeId;
 	private Boolean liked = false;
 	private Integer views = 0;
+	private Double rating = null;
 	private Date lastInteraction = new Date();
 	private State state = State.NA;
 	@StartNode
@@ -59,5 +60,11 @@ public class Interaction {
 	}
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+	public Double getRating() {
+		return rating;
+	}
+	public void setRating(Double rating) {
+		this.rating = rating;
 	}
 }

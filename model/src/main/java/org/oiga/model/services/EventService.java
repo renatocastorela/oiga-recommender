@@ -57,6 +57,26 @@ public class EventService {
 		template.save(interaction);
 		return interaction;
 	}
+	@Transactional
+	public Interaction rated(Event e, User u, Double rate){
+		Interaction interaction = getRelationShip(e, u);
+		logger.debug("Evaluacion");
+
+		if(interaction == null){
+			logger.debug("Creando una nueva interaccion entre "+e.getNodeId() + " y "+u.getNodeId());
+			interaction = new Interaction();
+			interaction.setUser(u);
+			interaction.setEvent(e);
+		}else{
+			logger.debug("Se cargo una nueva relacion entre "+e.getNodeId() + " y "+u.getNodeId());
+			interaction.setLastInteraction(new Date());
+		}
+		interaction.setRating(rate);
+		template.save(interaction);
+		return interaction;
+	}
+	
+	
 	public Interaction getRelationShip(Event e, User u) {
 		return template.getRelationshipBetween(u, e,Interaction.class ,"INTERACTS");
 	}

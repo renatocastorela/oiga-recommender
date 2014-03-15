@@ -125,6 +125,7 @@ public class EventController {
 		return "explore";
 	}
 	
+	//Fixme: Cambiar a Rest de mayor consistencia path: /events/{id} por metodo get
 	@RequestMapping(value = "details/{nodeId}", method = RequestMethod.GET)
 	public String eventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
 		Event event = eventRepository.findOne(nodeId);
