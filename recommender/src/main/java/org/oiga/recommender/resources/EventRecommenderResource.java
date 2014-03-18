@@ -1,6 +1,5 @@
 package org.oiga.recommender.resources;
 
-import javax.annotation.ManagedBean;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,7 +10,6 @@ import javax.ws.rs.core.Response;
 
 import org.oiga.recommender.services.EventRecommenderService;
 
-@ManagedBean
 @Path("/events/recommendation")
 public class EventRecommenderResource {
 	@Inject

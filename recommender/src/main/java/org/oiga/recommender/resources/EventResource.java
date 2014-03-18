@@ -10,12 +10,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Path("/events")
 public class EventResource {
-	ObjectMapper mapper = new ObjectMapper();
+	
 	
 	
 	@GET
@@ -25,15 +23,7 @@ public class EventResource {
 		List<String> res = new ArrayList<String>();
 		res.add("1");
 		res.add("2");
-		try {
-			//No es necesario hacer esto, bastaria con enviar solo el puro texto y armar
-			//La cadena manualmente
-			String r = mapper.writeValueAsString(res);
-			return Response.ok(r).build();
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
 		return null;
 	}
 }

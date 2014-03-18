@@ -10,11 +10,10 @@ public class OigaWebApplication extends ResourceConfig {
 	public OigaWebApplication() {
 		logger.info(
 				 "\n\t****************************************\n"
-				+ "\tInicializando Oiga Web Recommender"
+				+ "\tInicializando Oiga Web Recommender 1.0"
 				+"\n\t****************************************");
 		register(new RecommenderBinder());
-		
-		packages(true, "org.oiga.recommender.resources;org.oiga.recommender.services");
+		packages(true, "org.oiga.recommender.resources; org.oiga.recommender.services");
 	}
 
 }

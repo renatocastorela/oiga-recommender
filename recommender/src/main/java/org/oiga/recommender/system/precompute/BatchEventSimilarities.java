@@ -1,6 +1,7 @@
 package org.oiga.recommender.system.precompute;
 
-import java.io.File;
+import java.io.File
+;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -33,23 +34,25 @@ public class BatchEventSimilarities {
 		} else {
 			path = args[0];
 		}
-		File resultFile = new File(System.getProperty("java.io.tmpdir"),
-				"similarities.csv");
+		File resultFile = new File("similarities.csv");
 		if (resultFile.exists()) {
 			resultFile.delete();
 		}
 		logger.info("Cargando modelo de datos");
 		DataModel dataModel = new FileDataModel(new File(path));
+		
+		
 		ItemBasedRecommender recommender = new GenericBooleanPrefItemBasedRecommender(
 				dataModel, new LogLikelihoodSimilarity(dataModel));
+		
 		BatchItemSimilarities batch = new MultithreadedBatchItemSimilarities(
-				recommender, 5);
+				recommender, 2);
 
 		int numSimilarities = batch.computeItemSimilarities(Runtime
 				.getRuntime().availableProcessors(), 1,
 				new FileSimilarItemsWriter(resultFile));
 
-		System.out.println("Computed " + numSimilarities + " similarities for "
+		logger.info("Computed " + numSimilarities + " similarities for "
 				+ dataModel.getNumItems() + " items " + "and saved them to "
 				+ resultFile.getAbsolutePath());
 	}
