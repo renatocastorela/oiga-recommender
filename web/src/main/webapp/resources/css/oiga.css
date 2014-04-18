@@ -100,4 +100,12 @@ Pink button
     width: 300px;
     z-index: 1;
 }
-  } 
+   
+  /**
+   *Forms
+   */
+section#signup {
+    font-size: 13px;
+    margin: 40px auto;
+    width: 460px;
+}

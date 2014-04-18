@@ -1,5 +1,6 @@
 package org.oiga.web.utils;
 
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.oiga.model.entities.Role;
@@ -9,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.Connection;
@@ -21,20 +21,16 @@ public class UserUtils {
 	private static Logger logger = LoggerFactory.getLogger(UserUtils.class);
 
 	public static User prefillUser(Connection<?> connection) {
-		User user = null;
-
+		User user = new User();
 		if (connection != null) {
 			UserProfile up = connection.fetchUserProfile();
-			logger.debug("Fetching user profile {} ", up.getEmail());
-			user = new User.Builder()
-					.email(up.getEmail())
-					.firstName(up.getFirstName())
-					.lastName(up.getLastName())
-					.build();
+			logger.debug("Fetching user profile {} ", up.getUsername());
+			//TODO: Marcar un error si no se puede acceder al correo al iniciar sesion con face
+			user.setEmail(up.getEmail());
+			user.setFirstName(up.getFirstName());
+			user.setLastName(up.getLastName());
 			user.setImageUrl(connection.getImageUrl());
-			Role role = new Role();
-			role.setName("ROLE_OIGA_USER");
-			user.setRole(role);
+			user.setRoles(Collections.singleton(new Role("ROLE_OIGA_USER")));
 			try {
 				Facebook f = (Facebook) connection.getApi();
 				FacebookProfile p = f.userOperations().getUserProfile();
@@ -52,23 +48,13 @@ public class UserUtils {
 	}
 
 	public static void signIn(User user) {
-		logger.debug("Iniciando sesion con el usuario : {}", user.getFacebookUsername());
+		
+		logger.debug("Iniciando sesion con el usuario : {}", user.getEmail());
 		HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority( user.getRole().getName()) );
-		UserDetails userDetails = new UserDetails.Builder()
-									.email(user.getEmail())
-									.facebookThirdPartyId(user.getFacebookThirdPartyId())
-									.facebookUid(user.getFacebookUid())
-									.facebookUsername(user.getFacebookUsername())
-									.firstName(user.getFirstName())
-									.imageUrl(user.getImageUrl())
-									.lastName(user.getLastName())
-									.role(user.getRole())
-									.signInProvider(user.getSignInProvider())
-									.username(user.getFacebookUsername())
-									.password(user.getEmail())
-									.authorities(authorities)
-									.build();
+		for(Role rol:user.getRoles()){
+			authorities.add(new SimpleGrantedAuthority( rol.getName()) );
+		}
+		UserDetails userDetails = new UserDetails(user.getUsername(), user.getPassword(), authorities);
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), authorities));
 	}

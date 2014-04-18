@@ -9,6 +9,7 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.WebRequest;
 
+@Deprecated
 public class PostFacebookLoginInterceptor implements ConnectInterceptor<Facebook>{
 	private Logger logger = LoggerFactory.getLogger(PostFacebookLoginInterceptor.class);
 	

@@ -10,7 +10,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
+/**
+ * Clase de prueba de concepto
+ * @author jaime.renato
+ *
+ */
+@Deprecated
 @Path("/events")
 public class EventResource {
 	

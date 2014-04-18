@@ -28,6 +28,19 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
+	public User registerNewUser(String firstName,
+    		String lastName,
+    		String email,
+    		String password) throws DuplicateUserException{
+		User user = new User();
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setEmail(email);
+		user.setPassword(password);
+				return registerNewUser(user);
+		
+	}
+	
 	public User findByUsername(String facebookUsername){
 		User user = userRepository.findByfacebookUsername(facebookUsername);
 		return user;

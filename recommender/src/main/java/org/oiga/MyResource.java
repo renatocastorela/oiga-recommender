@@ -6,8 +6,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
+ * Clase de prueaba de concepto.
  * Root resource (exposed at "myresource" path)
  */
+@Deprecated
 @Path("myresource")
 public class MyResource {
 

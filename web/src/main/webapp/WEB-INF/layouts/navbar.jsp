@@ -93,17 +93,20 @@
 	</div>
 </div>
 <!-- Signup modal -->
-<div class="modal fade" id="signup-modal" tabindex="-1" role="dialog"
-	aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="signup-modal" tabindex="-1" role="dialog"  aria-labelledby="signupLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Registrarse</h4>
+				<h1 class="modal-title" id="signupLabel">¡Oiga!</h1>
+				
 			</div>
 			<div class="modal-body">
-				<p class="text-muted">Registrarse usando tu red social<p>
+				<p class="text-muted">
+				Oiga es el sitio que puede visitar para enterarse de los mejores eventos culturales y compartir su experiencia 
+				con amigos y familiares.
+				Puede registrarse usando su red social:<p>
 				<form action="${pageContext.request.contextPath}/signin/facebook" method="POST">
   					 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
   					 <input type="hidden" name="scope" value="email" />
@@ -113,11 +116,32 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				<p class="text-muted" align="left">
+				También puede registrase con su <a href="#register-modal" data-toggle="modal" data-dismiss="modal" >correo electronico</a>
+				</p>
+				<p class="text-muted" align="left">
+				¿Ya tiene una cuenta? <a href="#"  >Inicie sesion</a>
+				</p>
 			</div>
 		</div>
 	</div>
 </div>
+
+<!-- Register by mail modal -->
+<div class="modal" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="registerLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h1 class="modal-title" id="registerLabel">Conviertete en miembro</h1>
+      </div>
+      <div class="modal-body">
+      	<!-- Include signup form -->
+      	<jsp:include page="/WEB-INF/pages/users/signupForm.jsp"/>
+      </div>
+    </div>
+  </div>
+  </div>
 
 <script type="text/javascript">
 	/*Busqueda Global*/

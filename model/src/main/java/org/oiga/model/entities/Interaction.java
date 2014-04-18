@@ -15,6 +15,8 @@ public class Interaction {
 	@GraphId
     private Long    nodeId;
 	private Boolean liked = false;
+	//TODO:add Liked time
+	//TODO:add Rating time
 	private Integer views = 0;
 	private Double rating = null;
 	private Date lastInteraction = new Date();

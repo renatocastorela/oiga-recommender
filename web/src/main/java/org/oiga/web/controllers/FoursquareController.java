@@ -1,10 +1,8 @@
 package org.oiga.web.controllers;
 
-import org.oiga.vertex.services.FoursquareVenueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +14,16 @@ import fi.foyt.foursquare.api.FoursquareApiException;
 import fi.foyt.foursquare.api.Result;
 import fi.foyt.foursquare.api.entities.CompleteVenue;
 
+
 @Controller
+@Deprecated
 public class FoursquareController {
 	private static Logger logger = LoggerFactory.getLogger(FoursquareController.class);
 	
 	@Autowired
 	private FoursquareApi api;
 	
+	//FIXME: Pasar al Cliente
 	@RequestMapping(value="venues/{foursquareId}",method=RequestMethod.GET)
 	public @ResponseBody  CompleteVenue searchVenue(@PathVariable String foursquareId){
 		Result<CompleteVenue> result;
