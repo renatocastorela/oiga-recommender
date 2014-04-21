@@ -104,8 +104,15 @@ Pink button
   /**
    *Forms
    */
-section#signup {
+section#signup, section#signin {
     font-size: 13px;
     margin: 40px auto;
     width: 460px;
 }
+/**
+ *Message
+ */
+ .error-label{
+ 	color: #d14;
+ }
+ 

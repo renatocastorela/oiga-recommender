@@ -16,15 +16,16 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
+		
 	@Transactional
 	public User registerNewUser(User user) throws DuplicateUserException{
-		logger.debug("Registering new user account {}"+user.getEmail());
-		if(this.emailExist(user.getEmail())){
-			  logger.debug("Email: {} exists. Throwing exception.", user.getEmail());
-	          throw new DuplicateUserException("The email address: " + user.getEmail() + " is already in use.");
+		logger.debug("Registrando nueva cuenta "+user.getEmail());
+		User dbUser = userRepository.findByEmail(user.getEmail());
+		if(dbUser != null){
+			  logger.debug("El correo {} ya se encuentra registrado", user.getEmail());
+			  throw new DuplicateUserException("The email address: " + user.getEmail() + " is already in use.");
 		}
-		logger.debug("Persisting new user with email: {} ", user.getEmail());
+		logger.debug("Updating new user with email: {} ", user.getEmail());
 		return userRepository.save(user);
 	}
 	
@@ -45,18 +46,10 @@ public class UserService {
 		User user = userRepository.findByfacebookUsername(facebookUsername);
 		return user;
 	}
-
-	private boolean emailExist(String email) {
-		User user = null;
-		try {
-			user = userRepository.findByEmail(email);
-		} catch (Exception e) {
-			logger.debug("Email not found");
-		}
-		if (user != null) {
-			return true;
-		}
-		return false;
+	public UserRepository getUserRepository() {
+		return userRepository;
 	}
-
+	public void setUserRepository(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 }

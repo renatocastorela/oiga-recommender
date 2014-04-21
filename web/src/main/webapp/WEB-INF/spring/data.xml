@@ -37,6 +37,6 @@
 	<!-- optionally pass in neo4j-config parameters to the graph database <constructor-arg 
 		index="1"> <map> <entry key="allow_store_upgrade" value="true"/> </map> </constructor-arg> -->
 	</bean>
-	<neo4j:config graphDatabaseService="graphDatabaseService"/>
+	<neo4j:config graphDatabaseService="graphDatabaseService" />
     <neo4j:repositories base-package="org.oiga.model.repositories" />
 </beans>

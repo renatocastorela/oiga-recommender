@@ -21,13 +21,12 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 		String userName = null;
 		try{
 			User user = UserUtils.prefillUser(connection);
-			userName = user.getFacebookUsername();
-			logger.debug("Usuario conectado : {} ", user.getFacebookUsername() );
+			userName = user.getEmail();
+			logger.debug("Usuario conectado : {} ", user.getEmail() );
         	userService.registerNewUser(user);
         }catch(DuplicateUserException e){
         	  logger.error("User already registered : "+e.getMessage());
         }
 		return userName;
 	}
-
 }

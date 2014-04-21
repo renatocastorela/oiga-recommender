@@ -53,9 +53,8 @@
 				<li>
 					<a href="#" >
 						<sec:authentication property="principal.username"/>
-						<img alt="User profile" src="<sec:authentication property="principal.imageUrl"/>" class="img-rounded" style="height: 35px;s" >
+						<img alt="User profile" src="<sec:authentication property="principal.user.imageUrl"/>" class="img-rounded" style="height: 35px;s" >
 					</a>
-					
 				</li>
 				<li>
 					<a href="<c:url value="/signout" />">Cerrar sesion</a>
@@ -76,18 +75,7 @@
 				<h4 class="modal-title" id="myModalLabel">Iniciar sesion</h4>
 			</div>
 			<div class="modal-body">
-				<p>Inicia sesión con tu red social<p>
-				<form action="${pageContext.request.contextPath}/signin/facebook" method="POST">
-  					 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-  					 <input type="hidden" name="scope" value="email" />
-  					<button type="submit" class="btn btn-facebook btn-connect">
-  						Facebook
-  					</button>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<jsp:include page="/WEB-INF/pages/users/signinForm.jsp"/>
 			</div>
 		</div>
 	</div>
@@ -117,7 +105,7 @@
 			</div>
 			<div class="modal-footer">
 				<p class="text-muted" align="left">
-				También puede registrase con su <a href="#register-modal" data-toggle="modal" data-dismiss="modal" >correo electronico</a>
+				También puede registrase con su <a href="${pageContext.request.contextPath}/users/signup"  >correo electronico</a>
 				</p>
 				<p class="text-muted" align="left">
 				¿Ya tiene una cuenta? <a href="#"  >Inicie sesion</a>
@@ -126,22 +114,6 @@
 		</div>
 	</div>
 </div>
-
-<!-- Register by mail modal -->
-<div class="modal" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="registerLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h1 class="modal-title" id="registerLabel">Conviertete en miembro</h1>
-      </div>
-      <div class="modal-body">
-      	<!-- Include signup form -->
-      	<jsp:include page="/WEB-INF/pages/users/signupForm.jsp"/>
-      </div>
-    </div>
-  </div>
-  </div>
 
 <script type="text/javascript">
 	/*Busqueda Global*/

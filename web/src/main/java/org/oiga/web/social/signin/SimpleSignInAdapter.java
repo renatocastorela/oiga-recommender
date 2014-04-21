@@ -35,7 +35,7 @@ public class SimpleSignInAdapter implements SignInAdapter {
 	@Override
 	public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) {
 		logger.debug("Iniciando session en Oiga!! : '"+localUserId+"'");
-		User user = userService.findByUsername(localUserId);
+		User user = userService.getUserRepository().findByEmail(localUserId);
 		UserUtils.signIn(user);
 		return extractOriginalUrl(request);
 	}

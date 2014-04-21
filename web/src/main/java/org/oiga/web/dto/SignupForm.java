@@ -7,12 +7,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class SignupForm {
 	@NotEmpty
+	@Size(max=100)
 	private String firstName;
 	@NotEmpty
+	@Size(max=100)
 	private String lastName;
 	@Email
+	@NotEmpty
+	@Size(max=100)
 	private String email;
-	@Size(min = 6, message = "must be at least 6 characters")
+	@Size(min = 6, max = 30)
 	private String password;
 	
 	public String getFirstName() {

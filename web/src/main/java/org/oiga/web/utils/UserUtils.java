@@ -30,6 +30,7 @@ public class UserUtils {
 			user.setFirstName(up.getFirstName());
 			user.setLastName(up.getLastName());
 			user.setImageUrl(connection.getImageUrl());
+			user.setUsername(up.getEmail());
 			user.setRoles(Collections.singleton(new Role("ROLE_OIGA_USER")));
 			try {
 				Facebook f = (Facebook) connection.getApi();
@@ -48,13 +49,13 @@ public class UserUtils {
 	}
 
 	public static void signIn(User user) {
-		
 		logger.debug("Iniciando sesion con el usuario : {}", user.getEmail());
 		HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		for(Role rol:user.getRoles()){
 			authorities.add(new SimpleGrantedAuthority( rol.getName()) );
 		}
-		UserDetails userDetails = new UserDetails(user.getUsername(), user.getPassword(), authorities);
+		UserDetails userDetails = new UserDetails(user.getEmail(), user.getPassword(), authorities);
+		userDetails.setUser(user);
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), authorities));
 	}
