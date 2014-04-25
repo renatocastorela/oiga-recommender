@@ -115,4 +115,17 @@ section#signup, section#signin {
  .error-label{
  	color: #d14;
  }
+/**
+ *Profile
+ */ 
+.profile-header{
+	
+	
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
  

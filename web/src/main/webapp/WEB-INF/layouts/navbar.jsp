@@ -43,43 +43,49 @@
 					</li>
 					<li>
 						<button type="button" class="btn-pink navbar-btn btn-lg"
-							data-toggle="modal" data-target="#signin-modal">
+							data-toggle="modal" data-target="#signin-modal"
+							data-remote="${pageContext.request.contextPath}/users/signinModal">
 							<spring:message code="label.login" />
+			
 						</button>
 					</li>
 				</sec:authorize>
 				<!-- Authenticated -->
 			<sec:authorize access="isAuthenticated()">
 				<li>
-					<a href="#" >
-						<sec:authentication property="principal.username"/>
-						<img alt="User profile" src="<sec:authentication property="principal.user.imageUrl"/>" class="img-rounded" style="height: 35px;s" >
-					</a>
+					<img alt="User profile" src="<sec:authentication property="principal.user.imageUrl"/>" 
+						class="img-rounded" 
+						style="height: 35px;" />
 				</li>
 				<li>
-					<a href="<c:url value="/signout" />">Cerrar sesion</a>
+					<div class="dropdown">
+						<a data-toggle="dropdown" href="#" role="button">
+							<sec:authentication property="principal.username"/>
+							<span class="caret"></span>
+						</a>
+  						<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+    						<li>
+    							<a href="<c:url value="/users/"/><sec:authentication property="principal.user.nodeId"/>">Mi perfil</a>
+    						</li>
+    						<li>
+								<a href="<c:url value="/signout" />">Cerrar sesion</a>
+							</li>
+							
+  						</ul>
+					</div>
 				</li>
+				
 			</sec:authorize>
 		</ul>
 	</div>
 	</div>
 </nav>
 <!-- Signin modal -->
-<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog"
-	aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">Iniciar sesion</h4>
-			</div>
-			<div class="modal-body">
-				<jsp:include page="/WEB-INF/pages/users/signinForm.jsp"/>
-			</div>
-		</div>
-	</div>
+<div class="modal" id="signin-modal" tabindex="-1" role="dialog"
+	aria-labelledby="signinLabel" aria-hidden="true">
+	
 </div>
+
 <!-- Signup modal -->
 <div class="modal" id="signup-modal" tabindex="-1" role="dialog"  aria-labelledby="signupLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -108,7 +114,7 @@
 				También puede registrase con su <a href="${pageContext.request.contextPath}/users/signup"  >correo electronico</a>
 				</p>
 				<p class="text-muted" align="left">
-				¿Ya tiene una cuenta? <a href="#"  >Inicie sesion</a>
+				¿Ya tiene una cuenta? <a href="${pageContext.request.contextPath}/users/signin"  >Inicie sesion</a>
 				</p>
 			</div>
 		</div>

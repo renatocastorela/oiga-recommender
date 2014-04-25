@@ -9,8 +9,8 @@ import org.oiga.model.entities.Role;
 import org.oiga.model.entities.User;
 import org.oiga.model.exceptions.DuplicateUserException;
 import org.oiga.model.services.UserService;
+import org.oiga.web.dto.SigninForm;
 import org.oiga.web.dto.SignupForm;
-import org.oiga.web.social.signin.SignInUtils;
 import org.oiga.web.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,19 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.UserProfile;
-import org.springframework.social.connect.web.ProviderSignInUtils;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.FacebookProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 
 @Controller
@@ -46,9 +39,18 @@ public class UserController {
     @Autowired
     private MessageSource messageSource;
     
+    @RequestMapping(value="/{userId}",method=RequestMethod.GET)
+    public String showPublicProfile(@PathVariable Long userId, Model model){
+    	User user = userService.getUserRepository().findOne(userId);
+    	if(user == null){
+    		return "redirect:/";
+    	}
+    	model.addAttribute(user);
+    	return "users/profile";
+    }
     
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
-	public String signupForm(Model model) {
+	public String showSignupForm(Model model) {
 		if(!model.containsAttribute("signupForm")){
 			model.addAttribute("signupForm", new SignupForm());
 		}
@@ -56,7 +58,10 @@ public class UserController {
 	}
     
 	@RequestMapping(value="/signin", method=RequestMethod.GET)
-	public String signinForm(){
+	public String showSigninForm(Model model){
+		if(!model.containsAttribute("signinForm")){
+			model.addAttribute("signinForm", new SigninForm());
+		}
 		return "users/signin";
 	}
 	
@@ -74,15 +79,17 @@ public class UserController {
     }
     
     @RequestMapping(value="/signin", method = RequestMethod.POST)
-    public String signin(@RequestParam("email") String email, @RequestParam("password") String password,
-    		Model model,
+    public String signin(@Valid SigninForm form,
     		BindingResult formBinding){
+    	if(formBinding.hasErrors()){
+    		return null;
+    	}
     	try{
-    		User user = userService.getUserRepository().findByEmail(email);
+    		User user = userService.getUserRepository().findByEmail(form.getEmail());
     		if(user == null){
     			throw new UsernameNotFoundException("Usuario no encontrado");
     		}
-    		if(!user.getPassword().equals(password)){
+    		if(!user.getPassword().equals(form.getPassword())){
     			throw new BadCredentialsException("Password erroneo");
     		}
     		UserUtils.signIn(user);
@@ -90,16 +97,21 @@ public class UserController {
     	}catch(UsernameNotFoundException e){
     		formBinding.rejectValue("email",  "error.users.notFound", 
     				messageSource.getMessage("error.users.notFound", 
-    						new String[]{email}, 
+    						new String[]{}, 
     						Locale.getDefault()));
     	}catch(BadCredentialsException be){
     		formBinding.rejectValue("password",  "error.users.badCredentials", 
     				messageSource.getMessage("error.users.badCredentials", 
-    						new String[]{password}, 
+    						new String[]{}, 
     						Locale.getDefault()));
     	}
-    	
 		return null;
+    }
+    
+    @RequestMapping(value = "/signinModal", method = RequestMethod.GET)
+    public String showSigninModal(Model model){
+    	model.addAttribute("signinForm", new SigninForm());
+    	return "users/signinModal";
     }
     
     private User registerNewUser(SignupForm form, BindingResult formBinding){
