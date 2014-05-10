@@ -12,7 +12,13 @@
 			<div  class="center-block" >
 				<h1>${user.firstName} ${user.lastName}</h1>
 			</div>
-		</div>
 		
+		<ul class="nav nav-pills">
+  			<li class="active"><a href="#">Actividad</a></li>
+  			<li><a href="#">Mis eventos</a></li>
+  			<li><a href="#">Mi agenda</a></li>
+  			<li><a href="#">Comentarios</a></li>
+		</ul>
+		</div>
 	</jsp:body>
 </l:base>

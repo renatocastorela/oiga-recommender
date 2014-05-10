@@ -96,6 +96,6 @@ public class HomeController {
 	public String eventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
 		Event event = eventRepository.findOne(nodeId);
 		model.put("event", event);
-		return "detalles";
+		return "events/details";
 	}
 }

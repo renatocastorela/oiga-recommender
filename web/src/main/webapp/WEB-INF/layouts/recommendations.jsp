@@ -38,8 +38,10 @@
 							<fmt:formatDate value="${ev.endDate}"
 								pattern="yyyy-MM-dd " />
 							<dd>
+							<!-- 
 							<dt>Descripcion</dt>
   							<dd>${ev.description}</dd>
+  							 -->
   							<dt>Tipo</dt>
   			 				<dd>${ev.category.name}</dd>
   						</dl>
