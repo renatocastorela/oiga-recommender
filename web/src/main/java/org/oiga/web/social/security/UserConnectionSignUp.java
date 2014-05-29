@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
-import org.springframework.social.connect.UserProfile;
 
 public class UserConnectionSignUp implements ConnectionSignUp {
 	private static Logger logger = LoggerFactory.getLogger(UserConnectionSignUp.class);
@@ -19,14 +18,18 @@ public class UserConnectionSignUp implements ConnectionSignUp {
 	@Override
 	public String execute(Connection<?> connection) {
 		String userName = null;
+		User user = UserUtils.prefillUser(connection);
 		try{
-			User user = UserUtils.prefillUser(connection);
 			userName = user.getEmail();
 			logger.debug("Usuario conectado : {} ", user.getEmail() );
         	userService.registerNewUser(user);
+
         }catch(DuplicateUserException e){
         	  logger.error("User already registered : "+e.getMessage());
         }
+    	if(connection.getKey().getProviderId().equals("facebook")){
+			return user.getFacebookUid();
+		}
 		return userName;
 	}
 }

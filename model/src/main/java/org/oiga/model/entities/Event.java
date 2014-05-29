@@ -49,6 +49,8 @@ public class Event {
 	@JsonManagedReference
 	@RelatedToVia(type="INTERACTS")
 	private Set<Interaction> interactions = new HashSet<Interaction>();
+	@RelatedToVia(type="HAS_VIEWED")
+	private Set<ViewInteraction> viewInteractions = new HashSet<ViewInteraction>();
 	@RelatedTo(type = "SOURCED")
 	@Fetch	
 	private Repository repository;
@@ -212,5 +214,11 @@ public class Event {
 			eventCategory.setIcon("glyphicon-question-sign");
 			return eventCategory;
 		}
+	}
+	public Set<ViewInteraction> getViewInteractions() {
+		return viewInteractions;
+	}
+	public void setViewInteractions(Set<ViewInteraction> viewInteractions) {
+		this.viewInteractions = viewInteractions;
 	}
 }

@@ -12,10 +12,10 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 	<import resource="security.xml" />
 	<import resource="social.xml" />
-	
 	<context:component-scan base-package="org.oiga.web.controllers" />
 	<context:component-scan base-package="org.oiga.web.listeners" />
 	<context:component-scan base-package="org.oiga.web.beans" />
+	<context:component-scan base-package="org.oiga.web.context" />
 	<context:component-scan base-package="org.oiga.model.services" />
 	
 	<context:property-placeholder location="classpath:application.properties" />
@@ -28,4 +28,5 @@
 		<property name="prefix" value="/WEB-INF/pages/"/>
 		<property name="suffix" value=".jsp" />
 	</bean>
+	
 </beans>

@@ -6,14 +6,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.oiga.model.entities.Event;
 import org.oiga.model.repositories.EventRepository;
+import org.oiga.web.context.events.UserViewEvent;
 import org.oiga.web.utils.QueryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class EventController {
 	static Logger logger = LoggerFactory.getLogger(EventController.class);
 	private static final int PAGE_SIZE = 25;
+	@Inject
+	private ApplicationContext ctx;
 	
 	@Autowired
 	private EventRepository eventRepository;
@@ -130,6 +135,8 @@ public class EventController {
 	public String eventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
 		Event event = eventRepository.findOne(nodeId);
 		model.put("event", event);
+		System.out.println("SIiies este evento");
+		ctx.publishEvent(new UserViewEvent(event));
 		return "detalles";
 	}
 	

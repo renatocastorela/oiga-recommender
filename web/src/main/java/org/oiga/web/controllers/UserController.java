@@ -3,6 +3,8 @@ package org.oiga.web.controllers;
 import java.util.Collections;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.oiga.model.entities.Role;
@@ -29,109 +31,107 @@ import org.springframework.web.context.request.WebRequest;
 @Controller
 @RequestMapping("users")
 public class UserController {
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    protected static final String ERROR_CODE_EMAIL_EXIST = "NotExist.user.email";
-    protected static final String USER_ATTR = "user";
-    protected static final String VIEW_NAME_REGISTRATION_PAGE = "user/signup";
-    
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private MessageSource messageSource;
-    
-    @RequestMapping(value="/{userId}",method=RequestMethod.GET)
-    public String showPublicProfile(@PathVariable Long userId, Model model){
-    	User user = userService.getUserRepository().findOne(userId);
-    	if(user == null){
-    		return "redirect:/";
-    	}
-    	model.addAttribute(user);
-    	return "users/profile";
-    }
-    
-	@RequestMapping(value="/signup", method=RequestMethod.GET)
+	private static final Logger logger = LoggerFactory
+			.getLogger(UserController.class);
+	protected static final String ERROR_CODE_EMAIL_EXIST = "NotExist.user.email";
+	protected static final String USER_ATTR = "user";
+	protected static final String VIEW_NAME_REGISTRATION_PAGE = "user/signup";
+
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private MessageSource messageSource;
+
+	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+	public String showPublicProfile(@PathVariable Long userId, Model model) {
+		User user = userService.getUserRepository().findOne(userId);
+		if (user == null) {
+			return "redirect:/";
+		}
+		model.addAttribute(user);
+		return "users/profile";
+	}
+
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String showSignupForm(Model model) {
-		if(!model.containsAttribute("signupForm")){
+		if (!model.containsAttribute("signupForm")) {
 			model.addAttribute("signupForm", new SignupForm());
 		}
 		return "users/signup";
 	}
-    
-	@RequestMapping(value="/signin", method=RequestMethod.GET)
-	public String showSigninForm(Model model){
-		if(!model.containsAttribute("signinForm")){
+
+	@RequestMapping(value = "/signin", method = RequestMethod.GET)
+	public String showSigninForm(Model model) {
+		if (!model.containsAttribute("signinForm")) {
 			model.addAttribute("signinForm", new SigninForm());
 		}
 		return "users/signin";
 	}
-	
-    @RequestMapping(value="/signup", method = RequestMethod.POST)
-    public String signup(@Valid SignupForm form, BindingResult formBinding, WebRequest request){
-    	if(formBinding.hasErrors()){
-    		return null;
-    	}
-    	User user = registerNewUser(form, formBinding);
-    	if(user != null){
-    		UserUtils.signIn(user);
+
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public String signup(@Valid SignupForm form, BindingResult formBinding,
+			WebRequest request) {
+		if (formBinding.hasErrors()) {
+			return null;
+		}
+		User user = registerNewUser(form, formBinding);
+		if (user != null) {
+			UserUtils.signIn(user);
 			return "redirect:/";
-    	}
+		}
 		return null;
-    }
-    
-    @RequestMapping(value="/signin", method = RequestMethod.POST)
-    public String signin(@Valid SigninForm form,
-    		BindingResult formBinding){
-    	if(formBinding.hasErrors()){
-    		return null;
-    	}
-    	try{
-    		User user = userService.getUserRepository().findByEmail(form.getEmail());
-    		if(user == null){
-    			throw new UsernameNotFoundException("Usuario no encontrado");
-    		}
-    		if(!user.getPassword().equals(form.getPassword())){
-    			throw new BadCredentialsException("Password erroneo");
-    		}
-    		UserUtils.signIn(user);
-    		return "redirect:/";
-    	}catch(UsernameNotFoundException e){
-    		formBinding.rejectValue("email",  "error.users.notFound", 
-    				messageSource.getMessage("error.users.notFound", 
-    						new String[]{}, 
-    						Locale.getDefault()));
-    	}catch(BadCredentialsException be){
-    		formBinding.rejectValue("password",  "error.users.badCredentials", 
-    				messageSource.getMessage("error.users.badCredentials", 
-    						new String[]{}, 
-    						Locale.getDefault()));
-    	}
+	}
+
+	@RequestMapping(value = "/signin", method = RequestMethod.POST)
+	public String signin(HttpServletRequest request,
+			HttpServletResponse response, @Valid SigninForm form,
+			BindingResult formBinding) {
+		if (formBinding.hasErrors()) {
+			return null;
+		}
+		try {
+			User user = userService.getUserRepository().findByEmail(
+					form.getEmail());
+			if (user == null) {
+				throw new UsernameNotFoundException("Usuario no encontrado");
+			}
+			if (!user.getPassword().equals(form.getPassword())) {
+				throw new BadCredentialsException("Password erroneo");
+			}
+			UserUtils.signIn(user);
+			return "redirect:/";
+		} catch (UsernameNotFoundException e) {
+			formBinding.rejectValue("email", "error.users.notFound",
+					messageSource.getMessage("error.users.notFound",
+							new String[] {}, Locale.getDefault()));
+		} catch (BadCredentialsException be) {
+			formBinding.rejectValue("password", "error.users.badCredentials",
+					messageSource.getMessage("error.users.badCredentials",
+							new String[] {}, Locale.getDefault()));
+		}
 		return null;
-    }
-    
-    @RequestMapping(value = "/signinModal", method = RequestMethod.GET)
-    public String showSigninModal(Model model){
-    	model.addAttribute("signinForm", new SigninForm());
-    	return "users/signinModal";
-    }
-    
-    private User registerNewUser(SignupForm form, BindingResult formBinding){
-    	try{
-    		User user = new User();
-    		user.setFirstName(form.getFirstName());
-    		user.setLastName(form.getLastName());
-    		user.setEmail(form.getEmail());
-    		user.setUsername(form.getEmail());
-    		user.setPassword(form.getPassword());
-    		user.setImageUrl("resources/img/defaultUserPic.jpg");
+	}
+
+	
+
+	private User registerNewUser(SignupForm form, BindingResult formBinding) {
+		try {
+			User user = new User();
+			user.setFirstName(form.getFirstName());
+			user.setLastName(form.getLastName());
+			user.setEmail(form.getEmail());
+			user.setUsername(form.getEmail());
+			user.setPassword(form.getPassword());
+			user.setImageUrl("resources/img/defaultUserPic.jpg");
 			user.setRoles(Collections.singleton(new Role("ROLE_OIGA_USER")));
-    		userService.registerNewUser(user);
-    		return user;
-    	}catch(DuplicateUserException e){
-    		formBinding.rejectValue("email",  "error.users.duplicateEmail", 
-    				messageSource.getMessage("error.users.duplicateEmail", 
-    						new String[]{form.getEmail()}, 
-    						Locale.getDefault()));
-    		return null;
-    	}
-    }
+			userService.registerNewUser(user);
+			return user;
+		} catch (DuplicateUserException e) {
+			formBinding.rejectValue("email", "error.users.duplicateEmail",
+					messageSource.getMessage("error.users.duplicateEmail",
+							new String[] { form.getEmail() },
+							Locale.getDefault()));
+			return null;
+		}
+	}
 }

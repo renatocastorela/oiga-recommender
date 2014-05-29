@@ -15,4 +15,5 @@
         <property name="basename" value="i18n/messages"/>
         <property name="useCodeAsDefaultMessage" value="true"/>
     </bean>
+    
 </beans>

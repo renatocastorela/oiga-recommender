@@ -7,10 +7,10 @@
 
 <p class="text-muted">Inicie sesión con su red social</p>
 <form action="${pageContext.request.contextPath}/signin/facebook"
-	method="POST">
+	method="POST" id="loginByFacebook">
 	<input type="hidden" name="${_csrf.parameterName}"
-		value="${_csrf.token}" /> <input type="hidden" name="scope"
-		value="email" />
+		value="${_csrf.token}" /> 
+		<input type="hidden" name="scope" value="email" />
 	<button type="submit" class="btn btn-facebook btn-connect">
 		Facebook</button>
 </form>

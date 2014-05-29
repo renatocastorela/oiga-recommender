@@ -5,16 +5,16 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:c="http://www.springframework.org/schema/c"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 	<http pattern="/resources/**" security="none" />
 	<http pattern="/admin/h2/**" security="none" />
-	
 	<http use-expressions="true">
 		    <csrf/>
 		<!-- Authentication policy -->
-		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-url="/signin?param.error=bad_credentials" />
-		<logout logout-url="/signout" delete-cookies="JSESSIONID" />
+		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-url="/signin?param.error=bad_credentials" 
+		/>
+		<logout logout-url="/signout" delete-cookies="JSESSIONID" 
+		 success-handler-ref="logoutSuccessHandler" />
 		<intercept-url pattern="/favicon.ico" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/auth/**" access="permitAll" />
@@ -24,18 +24,19 @@
 		<intercept-url pattern="/users/register/**" access="permitAll"/>
 		<intercept-url pattern="/**" access="permitAll"  />
 		<remember-me />
-		<!--  Spring Social Security authentication filter -->
+		<!--  Spring Social Security authentication filter
 		<custom-filter ref="socialAuthenticationFilter" before="PRE_AUTH_FILTER" />
+		 -->
 	</http>
+	<!-- NOTA IMPORTANTE: El apartado de seguridad esta pobremente implementado, se intento utilizar un framework que integra
+		spring security con spring social, algunas elementos no son usados como 'socialAuthenticationProvider' ya que su funcionalidad
+		esta provista por el 'signInAdapter' ver como evoluciona esta integracion para mejorar la interaccion
+	-->
 	<authentication-manager alias="authenticationManager">
 		<!-- Spring Social Security authentication provider -->
 		<authentication-provider ref="socialAuthenticationProvider" />
 	</authentication-manager>	
-
-	 <!--in-memory user details service -->
-    <user-service id="userDetailsService">
-        <user name="647395325" password="-1" authorities="ROLE_USER"/>
-    </user-service>
+	<beans:bean id="logoutSuccessHandler" class="org.oiga.web.social.signin.LogoutSuccessHandler" />
     <!-- Social Security -->
     <beans:bean id="socialAuthenticationFilter" class="org.springframework.social.security.SocialAuthenticationFilter"
 		c:_0-ref="authenticationManager"
@@ -44,14 +45,11 @@
 		c:_3-ref="connectionFactoryLocator"
 		p:signupUrl="/users/register" /> 
 		<!-- TODO: Figure out how to wire this without this name -->
-
 	<beans:bean id="socialAuthenticationProvider" class="org.springframework.social.security.SocialAuthenticationProvider"
 		c:_0-ref="usersConnectionRepository"
-		c:_1-ref="socialUsersDetailService" />
+		c:_1-ref="userDetailsService" />
 		
-	<beans:bean id="socialUsersDetailService" class="org.oiga.web.social.security.SimpleSocialUsersDetailService"
-		c:_-ref="userDetailsService" />
-	
+	<beans:bean id="userDetailsService" class="org.oiga.web.social.security.SimpleSocialUsersDetailService" />
 	<beans:bean id="userIdSource" class="org.springframework.social.security.AuthenticationNameUserIdSource" />		
 	<beans:bean id="signInAdapter" class="org.oiga.web.social.signin.SimpleSignInAdapter" autowire="constructor" />
 	 <!--
@@ -60,5 +58,4 @@
         DO NOT USE THIS IN PRODUCTION.
     -->
     <beans:bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText" />
-		
 </beans:beans>

@@ -34,7 +34,11 @@ public class User {
 	@RelatedToVia(type = "INTERACTS", direction=Direction.BOTH)
 	@Fetch
 	private Set<Interaction> interactions = new HashSet<Interaction>();
-
+	@RelatedToVia(type = "HAS_VIEWED", direction=Direction.BOTH)
+	@Fetch
+	private Set<ViewInteraction> viewInteractions = new HashSet<ViewInteraction>();
+	
+	
 	public User() {
 	}
 

@@ -41,6 +41,21 @@ public class UserService {
 				return registerNewUser(user);
 		
 	}
+	/**
+	 * Metodo que registra un evento de usuario.
+	 * 
+	 * @param userId Identificador de usuario ó IP 
+	 */
+	public void onView(String userId){
+		//TODO:Agregar Soporte para usuarios oiga y de otros provedores como twiter o google+
+		User u = userRepository.findByfacebookUsername(userId);
+		if(u!=null){
+			//Register user event
+		}else{
+			//Register Anonymous user event 
+		}
+		
+	}
 	
 	public User findByUsername(String facebookUsername){
 		User user = userRepository.findByfacebookUsername(facebookUsername);

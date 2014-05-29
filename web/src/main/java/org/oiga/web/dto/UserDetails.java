@@ -2,9 +2,12 @@ package org.oiga.web.dto;
 
 
 import java.util.Collection;
+import java.util.HashSet;
 
+import org.oiga.model.entities.Role;
 import org.oiga.model.entities.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.social.security.SocialUser;
 
 public class UserDetails extends SocialUser {
@@ -30,5 +33,15 @@ public class UserDetails extends SocialUser {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public static UserDetails toUserDetails(User user){
+		HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		for(Role rol:user.getRoles()){
+			authorities.add(new SimpleGrantedAuthority( rol.getName()) );
+		}
+		UserDetails userDetails = new UserDetails(user.getEmail(), user.getPassword(), authorities);
+		userDetails.setUser(user);
+		return userDetails;
 	}
 }

@@ -11,8 +11,8 @@
 		<spring.version>3.2.6.RELEASE</spring.version>
 		<spring-security.version>3.2.0.RELEASE</spring-security.version>
 		<spring-data-neo4j.version>2.3.3.RELEASE</spring-data-neo4j.version>
-		<spring-social.version>1.1.0.BUILD-SNAPSHOT</spring-social.version>
-		<spring-social.facebook.version>1.1.0.BUILD-SNAPSHOT</spring-social.facebook.version>
+		<spring-social.version>1.1.0.RELEASE</spring-social.version>
+		<spring-social.facebook.version>1.1.0.RELEASE</spring-social.facebook.version>
 		<neo4j.version>1.9.4</neo4j.version>
 		<neo4j-spatial.version>0.11-neo4j-1.9</neo4j-spatial.version>
 		<jackson.version>2.3.1</jackson.version>

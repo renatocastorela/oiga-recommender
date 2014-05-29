@@ -17,6 +17,7 @@ public class PostFacebookLoginInterceptor implements ConnectInterceptor<Facebook
 	public void postConnect(Connection<Facebook> conn, WebRequest arg1) {
 		String name = conn.getDisplayName();
 		logger.debug("Usuario conectado "+name);
+		
 	}
 
 	@Override
