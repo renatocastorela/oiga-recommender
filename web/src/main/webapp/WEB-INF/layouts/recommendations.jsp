@@ -45,7 +45,7 @@
   							<dt>Tipo</dt>
   			 				<dd>${ev.category.name}</dd>
   						</dl>
-  						<a class="btn btn-default" href="${pageContext.request.contextPath}/details/${ev.nodeId}" role="button">Ver detalles &raquo;</a>
+  						<a class="btn btn-default" href="${pageContext.request.contextPath}/events/${ev.nodeId}" role="button">Ver detalles &raquo;</a>
   					</div>
            		</div>
               

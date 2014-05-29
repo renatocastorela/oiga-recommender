@@ -1,4 +1,6 @@
 <%@tag description="Base Pages template" pageEncoding="UTF-8"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <%@attribute name="pageTitle" fragment="true"%>
 <%@attribute name="openGraphMeta" fragment="true" required="false"%>
 <%@attribute name="header" fragment="true"%>
@@ -57,10 +59,21 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/mustache.js"></script>
 </head>
+<!-- Variables globales -->
+<script type="text/javascript">
+	var ctx = "${pageContext.request.contextPath}";
+	var oiga = new Object();
+	if (typeof $.cookie("oiga.rememberMe") == 'undefined') {
+		oiga.rememberMe = "true";
+	}else{
+		oiga.rememberMe = $.cookie("oiga.rememberMe");
+	}
+</script>
+
 <body>
 	<!-- Facebook SDK -->
 	<div id="fb-root"></div>
-	<script>
+   	<script>
 	$(document).ready(function() {
 		  $.ajaxSetup({ cache: true });
 		  $.getScript('//connect.facebook.net/es_LA/all.js', function(){
@@ -69,7 +82,30 @@
 		      status     : true,
 	          xfbml      : true
 		    });
+			
+			
 			console.log("Se inicializa facebook");
+			console.log("Estus remmeberMe : "+oiga.rememberMe);
+			//Autenticando en la aplicacion 
+			FB.getLoginStatus(function(response) {
+				if (response.status === 'connected' && oiga.rememberMe === 'true') {
+					console.log("Reconectando con la aplicacacion..");
+					if( $("#user-functions ul").is(".anonymous") ){
+						response.authResponse['${_csrf.parameterName}'] = '${_csrf.token}';
+						$.post(ctx+"/reconnect/facebook", response.authResponse,
+							"json")
+							.done(function(data){
+								$(" #user-functions ").fadeOut("slow", function(){
+									$(this).load(ctx+"/navbar/userFunctions").fadeIn("slow");
+							});
+								})
+							.fail(function(jqXHR, textStatus, errorThrown){
+								console.error(jqXHR+","+textStatus+" , "+errorThrown);
+								});
+					  }
+					}
+			});
+			
 			// Me gosta
 			var page_like_callback = function(url, html_element) {
 			  console.log("page_like_callback");
@@ -82,28 +118,15 @@
 			  console.log(url);
 			  console.log(html_element);
 			}
-			
-			FB.Event.subscribe('edge.create', page_like_callback);
+			FB.Event.subscribe('edge.create', page_like_callback);			
 			FB.Event.subscribe('edge.remove', page_unlike_callback);
+			
 		  });
 			
 		});
-/* 	
-		(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id))
-				return;
-			js = d.createElement(s);
-			js.id = id;
-			js.src = "//connect.facebook.net/es_LA/all.js#xfbml=1&appId=546423088770268";
-			fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
- */	
  </script>
-	
 	<!-- Oiga Scripts -->
 	<script type="text/javascript">
-		var ctx = "${pageContext.request.contextPath}";
 		$.cookie.json = true;
 		if (typeof $.cookie("location") == 'undefined') {
 			$.ajax({
@@ -119,8 +142,9 @@
 								+ $.cookie("location").region_name);
 					});
 		} else {
-			console.debug("Location : " + $.cookie("location").region_name);
+			console.debug(">Location : " + $.cookie("location").region_name);
 		}
+		
 		function getParameterByName(name) {
 			name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
 			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex
@@ -129,7 +153,7 @@
 					.replace(/\+/g, " "));
 		}
 	</script>
-	<jsp:include page="/WEB-INF/layouts/navbar.jsp" />
+	<jsp:include page="/WEB-INF/pages/navbar/navbarMain.jsp" />
 	<jsp:doBody />
 </body>
 </html>
