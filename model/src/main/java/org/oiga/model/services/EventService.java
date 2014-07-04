@@ -3,12 +3,9 @@ package org.oiga.model.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.oiga.model.entities.Event;
-import org.oiga.model.entities.Interaction;
-import org.oiga.model.entities.User;
 import org.oiga.model.repositories.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +31,14 @@ public class EventService {
 	private SimpleVenueService venueService;
 	private ObjectMapper mapper = new ObjectMapper();
 	
-	
 	public List<Event> getByGeolocation(){
 		ArrayList<Event> events = new ArrayList<Event>();
 		
 		return events;
 	}
+	/*
 	@Transactional
 	public Interaction liked(Event e, User u){
-		//Validamos que no exista la relacion
 		Interaction interaction = getRelationShip(e, u);
 		if(interaction == null){
 			logger.debug("Creando una nueva interaccion entre "+e.getNodeId() + " y "+u.getNodeId());
@@ -57,6 +53,9 @@ public class EventService {
 		template.save(interaction);
 		return interaction;
 	}
+	
+	
+	
 	@Transactional
 	public Interaction rated(Event e, User u, Double rate){
 		Interaction interaction = getRelationShip(e, u);
@@ -80,6 +79,8 @@ public class EventService {
 	public Interaction getRelationShip(Event e, User u) {
 		return template.getRelationshipBetween(u, e,Interaction.class ,"INTERACTS");
 	}
+	
+	*/
 	
 	@Transactional
 	public void importEvents(String fileName){

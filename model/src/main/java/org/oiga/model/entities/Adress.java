@@ -30,6 +30,9 @@ public class Adress {
 	public void setWkt(String geo) {
 		this.wkt = geo;
 	}
+	public void setWkt(Double lon, Double lat) {
+		this.wkt = String.format("POINT( %.2f %.2f )", lon, lat);
+	}
 	public String getCountry() {
 		return country;
 	}
@@ -65,9 +68,6 @@ public class Adress {
 	}
 	public void setCrossStreet(String crossStreet) {
 		this.crossStreet = crossStreet;
-	}
-	public void setWkt(Double lon, Double lat) {
-		this.wkt = String.format("POINT( %.2f %.2f )", lon, lat);
 	}
 	
 }

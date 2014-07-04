@@ -17,6 +17,7 @@ public class UserViewEvent extends ApplicationEvent{
 		super(source);
 	}
 	
+	
 	public Event getEvent(){
 		return (Event) source;
 	}

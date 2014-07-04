@@ -5,10 +5,8 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 
 @NodeEntity
 public class Role {
-	
 	@GraphId
 	private Long nodeId;
-	
 	private String name;
 	
 	public Role() {
@@ -26,5 +24,13 @@ public class Role {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Long getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
 	}
 }

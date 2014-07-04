@@ -65,6 +65,7 @@ public class ReconnectController {
 			usersConnectionRepository.createConnectionRepository(userID).addConnection(conn);
 		}
 		signInAdapter.signIn(userID, conn, new ServletWebRequest(request, response));
+		//TODO: Agregar excecion si el usuario no se encuentra registrado
 		result.put("response", "sucess");
 		logger.info("Se reconecto el usuario "+conn.fetchUserProfile().getName());
 		return result;

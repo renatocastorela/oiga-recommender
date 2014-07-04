@@ -1,0 +1,6 @@
+#Skip test
+mvn install -Dmaven.test.skip=true
+#Run specific test
+mvn -Dtest=TestCircle test
+#Run specific test method
+mvn -Dtest=*UserServiceTest#testRegisterUser test 

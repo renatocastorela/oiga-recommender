@@ -1,7 +1,7 @@
 package org.oiga.web.controllers;
 
-import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
@@ -44,26 +42,45 @@ public class HomeController {
 	public String home(
 			@CookieValue(value = "location", required=false) String location, 
 			HttpServletRequest request, 
-			ModelMap model) throws JsonParseException, JsonMappingException, IOException{
-		logger.debug("Client IP "+request.getRemoteAddr()+",  "+request.getHeader("X-Forwarded-For")+", "+InetAddress.getLocalHost().getHostAddress());
+			ModelMap model){
+		try {
+			logger.debug("Client IP "+request.getRemoteAddr()+",  "+request.getHeader("X-Forwarded-For")+", "+InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e1) {
+			logger.error("Host no conocido",e1);
+		}
 		//TODO:Pasar esta carga inicial a ajax
 		if(location == null){
 			location = LocationUtils.getUserLocation(request);
 		}
 		logger.debug("cookie location: "+location);
-		HashMap<String, String> jsonLoc =
-		        new ObjectMapper().readValue(location, new TypeReference<HashMap<String,String>>() {});
-		double lt = Double.valueOf( jsonLoc.get("latitude"));
-		double ln = Double.valueOf( jsonLoc.get("longitude"));
+		HashMap<String, String> jsonLoc;
+		//FIXME: Quitar esta horrible implementacion, pasar todo este codigo al cliente para resolver 
+		//la ubicacion inicial
+		double lt = 19.3200988;
+		double ln = -99.1521845;
+		try {
+			jsonLoc = new ObjectMapper().readValue(location, new TypeReference<HashMap<String,String>>() {});
+			lt = Double.valueOf( jsonLoc.get("latitude"));
+			ln = Double.valueOf( jsonLoc.get("longitude"));
+		}catch(Exception e){
+			lt = 19.3200988;
+			ln = -99.1521845;
+			logger.error("Hubo un error al intentar cargar los mensajes: "+e.getMessage(), e);
+		}
 		
 		List<Map<String, Object>> categories = new ArrayList<Map<String, Object>>();
 //		Pageable page = new PageRequest(0, 25);
 //		Page<Event> result = eventRepository.findAll(page);
-	
+		
+		List<Event> events = new ArrayList<Event>();
+		Iterable<Event> result = eventRepository.findByCategory("Danza");
+		CollectionUtils.addAll(events, result.iterator());
+		
 		String function = String.format(EventRepository.WITHIN_DISTANCE, lt, ln, 25.0);
 		logger.debug("Argumentos de entrada "+lt+", "+ln+" formato "+ function);
-		Iterable<Event> result = eventRepository.getLocation(function);
-		ArrayList<Event> events = Lists.newArrayList(result);
+		//Iterable<Event> result = eventRepository.getLocation(function);
+		
+		//ArrayList<Event> events = Lists.newArrayList(result);
 //		events = result.getContent();
 		Iterable<Map<String, Object>> categoriesIterator = eventCategoryRepository.getCategoriesCount();
 		categories = Lists.newArrayList(categoriesIterator);
@@ -76,9 +93,9 @@ public class HomeController {
 	@RequestMapping(value = "/filter/{category}", method = RequestMethod.GET)
 	public String filterByCategory(@PathVariable String category, HttpServletRequest request, ModelMap model){
 		//TODO:Pasar esta carga inicial a ajax
-		List<Event> events = new ArrayList<Event>();
 		List<Map<String, Object>> categories = new ArrayList<Map<String, Object>>();
 		
+		List<Event> events = new ArrayList<Event>();
 		Iterable<Event> result = eventRepository.findByCategory(category);
 		CollectionUtils.addAll(events, result.iterator());
 
@@ -92,10 +109,4 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/details/{nodeId}", method = RequestMethod.GET)
-	public String eventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
-		Event event = eventRepository.findOne(nodeId);
-		model.put("event", event);
-		return "events/details";
-	}
 }

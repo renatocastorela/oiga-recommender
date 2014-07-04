@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.GraphProperty;
@@ -15,8 +16,6 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.annotation.RelatedToVia;
 import org.springframework.data.neo4j.support.index.IndexType;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @NodeEntity
 public class Event {
@@ -46,11 +45,13 @@ public class Event {
 	@RelatedTo(type="PERFORMED")
 	@Fetch
 	private SimpleVenue venue;
-	@JsonManagedReference
-	@RelatedToVia(type="INTERACTS")
-	private Set<Interaction> interactions = new HashSet<Interaction>();
-	@RelatedToVia(type="HAS_VIEWED")
+	@RelatedToVia(type="VIEWED")
 	private Set<ViewInteraction> viewInteractions = new HashSet<ViewInteraction>();
+	@RelatedToVia(type = "LIKED", direction=Direction.BOTH)
+	private Set<LikeInteraction> likeInteractions = new HashSet<LikeInteraction>();
+	@RelatedToVia(type = "RATED", direction=Direction.BOTH)
+	@Fetch
+	private Set<RateInteraction> rateInteractions = new HashSet<RateInteraction>();
 	@RelatedTo(type = "SOURCED")
 	@Fetch	
 	private Repository repository;
@@ -82,12 +83,6 @@ public class Event {
 	}
 	public void setTicketPrices(String ticketPrices) {
 		this.ticketPrices = ticketPrices;
-	}
-	public Set<Interaction> getInteractions() {
-		return interactions;
-	}
-	public void setInteractions(Set<Interaction> interactions) {
-		this.interactions = interactions;
 	}
 	public List<String> getOtherDetails() {
 		return otherDetails;

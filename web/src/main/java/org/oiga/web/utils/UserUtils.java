@@ -1,16 +1,18 @@
 package org.oiga.web.utils;
 
-import java.util.Collections;
 import java.util.HashSet;
 
 import org.oiga.model.entities.Role;
 import org.oiga.model.entities.User;
 import org.oiga.web.dto.UserDetails;
+import org.oiga.web.exceptions.NullUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
@@ -31,7 +33,10 @@ public class UserUtils {
 			user.setLastName(up.getLastName());
 			user.setImageUrl(connection.getImageUrl());
 			user.setUsername(up.getEmail());
-			user.setRoles(Collections.singleton(new Role("ROLE_OIGA_USER")));
+			HashSet<Role> roles = new HashSet<Role>(); 
+			roles.add(new Role("ROLE_OIGA_USER"));
+			roles.add(new Role("ROLE_FACEBOOK_USER"));
+			user.setRoles(roles);
 			try {
 				Facebook f = (Facebook) connection.getApi();
 				FacebookProfile p = f.userOperations().getUserProfile();
@@ -48,15 +53,33 @@ public class UserUtils {
 		return user;
 	}
 
-	public static void signIn(User user) {
-		logger.debug("Iniciando sesion con el usuario : {}", user.getFacebookUsername());
+	public static void signIn(User user) throws NullUserException {
+		if(user == null){
+			throw new NullUserException("El usuario no puede ser nulo");
+		}
 		HashSet<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		for(Role rol:user.getRoles()){
 			authorities.add(new SimpleGrantedAuthority( rol.getName()) );
 		}
+		logger.debug("Authorities : "+authorities);
 		UserDetails userDetails = new UserDetails(user.getFacebookUsername(), user.getPassword(), authorities);
 		userDetails.setUser(user);
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), authorities));
-	}
+	} 
+	
+	public static boolean hasRole(String role) {
+	        SecurityContext context = SecurityContextHolder.getContext();
+	        if (context == null)
+	            return false;
+	        Authentication authentication = context.getAuthentication();
+	        if (authentication == null)
+	            return false;
+
+	        for (GrantedAuthority auth : authentication.getAuthorities()) {
+	            if (role.equals(auth.getAuthority()))
+	                return true;
+	        }
+	        return false;
+	    }
 }

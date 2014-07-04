@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.oiga.model.entities.Event;
 import org.oiga.model.repositories.EventRepository;
+import org.oiga.web.context.events.UserLikeEvent;
+import org.oiga.web.context.events.UserRateEvent;
 import org.oiga.web.context.events.UserViewEvent;
 import org.oiga.web.utils.QueryUtils;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.conversion.EndResult;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping("/events")
@@ -122,7 +126,19 @@ public class EventController {
 		return events;
 	}
 	
+	@RequestMapping(value="liked/{nodeId}", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void onLiked(@PathVariable Long nodeId){
+		Event event = eventRepository.findOne(nodeId);
+		ctx.publishEvent(new UserLikeEvent(event));
+	}
 	
+	@RequestMapping(value="rated/{nodeId}", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void onRated(@PathVariable Long nodeId, @RequestParam Double score){
+		Event event = eventRepository.findOne(nodeId);
+		ctx.publishEvent(new UserRateEvent(event, score));
+	}
 	
 	@RequestMapping( value="explore", method=RequestMethod.GET)
 	public  String explore( @RequestParam(value="query", required=false) String query , Map<String, Object> model)
@@ -130,9 +146,8 @@ public class EventController {
 		return "explore";
 	}
 	
-	//Fixme: Cambiar a Rest de mayor consistencia path: /events/{id} por metodo get
-	@RequestMapping(value = "{nodeId}", method = RequestMethod.GET)
-	public String eventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
+	@RequestMapping(value = "{nodeId}")
+	public String showEventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
 		Event event = eventRepository.findOne(nodeId);
 		model.put("event", event);
 		ctx.publishEvent(new UserViewEvent(event));

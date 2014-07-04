@@ -25,8 +25,8 @@
 		<intercept-url pattern="/**" access="permitAll"  />
 		<remember-me />
 		<!--  Spring Social Security authentication filter
-		<custom-filter ref="socialAuthenticationFilter" before="PRE_AUTH_FILTER" />
 		 -->
+		<custom-filter ref="socialAuthenticationFilter" before="PRE_AUTH_FILTER" />
 	</http>
 	<!-- NOTA IMPORTANTE: El apartado de seguridad esta pobremente implementado, se intento utilizar un framework que integra
 		spring security con spring social, algunas elementos no son usados como 'socialAuthenticationProvider' ya que su funcionalidad

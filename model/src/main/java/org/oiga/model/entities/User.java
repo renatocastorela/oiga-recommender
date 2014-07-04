@@ -21,22 +21,27 @@ public class User {
 	private String facebookThirdPartyId;
 	@Indexed(indexName = "user_email")
 	private String email;
+	private String sessionId;
 	private String firstName;
 	private String lastName;
 	private String username;
 	private String password;
+	//TODO: Agregar genero
+	//TODO: Agregar direccion
+	//TODO: Agregar fecha de nacimiento 
 	@Transient
 	private String signInProvider;
 	private String imageUrl;
-	@RelatedTo(type = "HAS_ROLES")
+	@RelatedTo(type = "HAS_ROLES",  direction = Direction.BOTH)
 	@Fetch
 	private Set<Role> roles;
-	@RelatedToVia(type = "INTERACTS", direction=Direction.BOTH)
-	@Fetch
-	private Set<Interaction> interactions = new HashSet<Interaction>();
-	@RelatedToVia(type = "HAS_VIEWED", direction=Direction.BOTH)
-	@Fetch
+	//TODO: Validar si en realidad se necesita hacer un fetch de esta informacion 
+	@RelatedToVia(type = "VIEWED", direction=Direction.BOTH)
 	private Set<ViewInteraction> viewInteractions = new HashSet<ViewInteraction>();
+	@RelatedToVia(type = "LIKED", direction=Direction.BOTH)
+	private Set<LikeInteraction> likeInteractions = new HashSet<LikeInteraction>();
+	@RelatedToVia(type = "RATED", direction=Direction.BOTH)
+	private Set<RateInteraction> rateInteractions = new HashSet<RateInteraction>();
 	
 	
 	public User() {
@@ -117,6 +122,22 @@ public class User {
 	public String getUsername() {
 		return username;
 	}
+	
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
+	public Set<ViewInteraction> getViewInteractions() {
+		return viewInteractions;
+	}
+
+	public void setViewInteractions(Set<ViewInteraction> viewInteractions) {
+		this.viewInteractions = viewInteractions;
+	}
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -138,11 +159,20 @@ public class User {
 		this.imageUrl = imageUrl;
 	}
 
-	public Set<Interaction> getInteractions() {
-		return interactions;
+	public Set<LikeInteraction> getLikeInteractions() {
+		return likeInteractions;
 	}
 
-	public void setInteractions(Set<Interaction> interactions) {
-		this.interactions = interactions;
+	public void setLikeInteractions(Set<LikeInteraction> likeInteractions) {
+		this.likeInteractions = likeInteractions;
 	}
+
+	public Set<RateInteraction> getRateInteractions() {
+		return rateInteractions;
+	}
+
+	public void setRateInteractions(Set<RateInteraction> rateInteractions) {
+		this.rateInteractions = rateInteractions;
+	}
+	
 }

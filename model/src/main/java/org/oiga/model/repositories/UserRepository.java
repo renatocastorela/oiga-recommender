@@ -7,4 +7,5 @@ public interface UserRepository extends GraphRepository<User>{
 	User findByEmail(String email);
 	User findByfacebookUsername(String facebookUsername);
 	User findByFacebookUid(String facebookUid);
+	User findBySessionId(String sessionId);
 }

@@ -53,6 +53,7 @@
 					});
 					</script>
 				</li>
+				<li><a id="switch-user-button" href="#">Cambiar de usuario</a></li>
 				</ul>
 			</div>
 		</li>

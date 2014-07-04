@@ -1,55 +1,29 @@
 package org.oiga.model.entities;
 
-import java.util.Date;
-
 import org.springframework.data.neo4j.annotation.EndNode;
 import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-@RelationshipEntity(type="INTERACTS")
-public class Interaction {
-	public enum State{ATTENDING, DECLINED, MAYBE, NOREPLY, NOT_INVITED, NA};
+public abstract class Interaction {
 	@GraphId
-    private Long    nodeId;
-	private Boolean liked = false;
-	//TODO:add Liked time
-	//TODO:add Rating time
-	private Integer views = 0;
-	private Double rating = null;
-	private Date lastInteraction = new Date();
-	private State state = State.NA;
+    private Long nodeId;
+	private Long interactionTime;
 	@StartNode
 	private User user;
 	@EndNode
-	@JsonBackReference
 	private Event event;
 	
-	public Boolean getLiked() {
-		return liked;
+	public Long getNodeId() {
+		return nodeId;
 	}
-	public void setLiked(Boolean liked) {
-		this.liked = liked;
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
 	}
-	public Integer getViews() {
-		return views;
+	public Long getInteractionTime() {
+		return interactionTime;
 	}
-	public void setViews(Integer views) {
-		this.views = views;
-	}
-	public Date getLastInteraction() {
-		return lastInteraction;
-	}
-	public void setLastInteraction(Date lastInteraction) {
-		this.lastInteraction = lastInteraction;
-	}
-	public State getState() {
-		return state;
-	}
-	public void setState(State state) {
-		this.state = state;
+	public void setInteractionTime(Long interactionTime) {
+		this.interactionTime = interactionTime;
 	}
 	public User getUser() {
 		return user;
@@ -62,11 +36,5 @@ public class Interaction {
 	}
 	public void setEvent(Event event) {
 		this.event = event;
-	}
-	public Double getRating() {
-		return rating;
-	}
-	public void setRating(Double rating) {
-		this.rating = rating;
 	}
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.oiga.model.entities.User;
 import org.oiga.model.services.UserService;
+import org.oiga.web.exceptions.NullUserException;
 import org.oiga.web.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +36,12 @@ public class SimpleSignInAdapter implements SignInAdapter {
 	@Override
 	public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
 		logger.debug("Iniciando session en Oiga!! : '"+userId+"'");
-		User user;
-		if( connection.getKey().getProviderId().equals("facebook")){
-			user = userService.getUserRepository().findByFacebookUid(userId);
-		}else{
-			user = userService.getUserRepository().findByEmail(userId);
+		User user = userService.findByProviderId(userId, connection.getKey().getProviderId() );
+		try {
+			UserUtils.signIn(user);
+		} catch (NullUserException e) {
+			throw new RuntimeException("Usuario nulo, inconsistencia en el repo de conexiones del usuario, ",e);
 		}
-		UserUtils.signIn(user);
 		addCookie(request);
 		return extractOriginalUrl(request);
 	}

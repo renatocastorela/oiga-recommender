@@ -10,9 +10,11 @@ import javax.validation.Valid;
 import org.oiga.model.entities.Role;
 import org.oiga.model.entities.User;
 import org.oiga.model.exceptions.DuplicateUserException;
+import org.oiga.model.exceptions.NullEMailException;
 import org.oiga.model.services.UserService;
 import org.oiga.web.dto.SigninForm;
 import org.oiga.web.dto.SignupForm;
+import org.oiga.web.exceptions.NullUserException;
 import org.oiga.web.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,8 +77,10 @@ public class UserController {
 			return null;
 		}
 		User user = registerNewUser(form, formBinding);
-		if (user != null) {
+		try {
 			UserUtils.signIn(user);
+		} catch (NullUserException e) {
+			logger.error("No se pudo registrar el usuario "+e);
 			return "redirect:/";
 		}
 		return null;
@@ -98,7 +102,11 @@ public class UserController {
 			if (!user.getPassword().equals(form.getPassword())) {
 				throw new BadCredentialsException("Password erroneo");
 			}
-			UserUtils.signIn(user);
+			try {
+				UserUtils.signIn(user);
+			} catch (NullUserException e) {
+				throw new UsernameNotFoundException("Usuario no encontrado", e);
+			}
 			return "redirect:/";
 		} catch (UsernameNotFoundException e) {
 			formBinding.rejectValue("email", "error.users.notFound",
@@ -132,6 +140,12 @@ public class UserController {
 							new String[] { form.getEmail() },
 							Locale.getDefault()));
 			return null;
+		} catch (NullEMailException e) {
+			formBinding.rejectValue("email", "error.users.nullEmail",
+					messageSource.getMessage("error.users.nullEmail",
+							new String[] { form.getEmail() },
+							Locale.getDefault()));
+				return null;
 		}
 	}
 }

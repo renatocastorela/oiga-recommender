@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="l" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <l:base>
@@ -10,7 +10,7 @@
 	<jsp:attribute name="openGraphMeta">
 		<meta property="og:title" content="<spring:message code="label.oiga.title" arguments="${event.name}" />" />
 		<meta property="og:site_name" content="Oiga" />
-		<meta property="og:url" content="${pageContext.request.contextPath}/details/${event.nodeId}" />
+		<meta property="og:url" content="${pageContext.request.contextPath}/events/${event.nodeId}" />
 		<meta property="og:description" content="${event.description}" />
 		<c:choose>
 			<c:when test="${event.picture }">
@@ -33,12 +33,13 @@
 	    			<fmt:formatDate value="${event.startDate}" /> -
 							<fmt:formatDate value="${event.endDate}" />
 	    		</h3>
-	    		<h1> ${event.name} </h1>
+	    		<h1> ${event.name} </h1> 
 	    		<div class="fb-like"
-						data-href="${pageContext.request.contextPath}/details/${event.nodeId}"
+						data-href="${pageContext.request.contextPath}/events/${event.nodeId}"
 						data-layout="standard" data-action="like" data-show-faces="false"
 						data-share="true"></div>
-	
+				<div id="${event.nodeId}"  ></div>
+				<hr>
 	    		<dl>
 					<dt>Fuente</dt>
   					<dd> <a href="${event.repository.url}">${event.repository.name}</a> </dd>
@@ -109,6 +110,18 @@
       		    }
       		}).addTo(map);
       	}
+      	$('#${event.nodeId}').raty({
+      		  score : 3,
+			  click: function(score, evt) {
+					var id = $(this).attr("id");
+					$.post(ctx+"/events/rated/"+id,{
+						'score' : score, 
+						'${_csrf.parameterName}' : '${_csrf.token}' 
+					});
+				  }
+				});
+		  
+		
       </script>
 	</jsp:body>
 </l:base>

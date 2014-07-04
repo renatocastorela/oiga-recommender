@@ -5,7 +5,7 @@ import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
 
-@RelationshipEntity
+@RelationshipEntity(type="VIEWED")
 public class ViewInteraction {
 	@GraphId
     private Long nodeId;
@@ -40,6 +40,4 @@ public class ViewInteraction {
 	public void setInteractionTime(Long interactionTime) {
 		this.interactionTime = interactionTime;
 	}
-	
-	
 }
