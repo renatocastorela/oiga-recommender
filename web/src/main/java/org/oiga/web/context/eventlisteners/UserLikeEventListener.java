@@ -28,7 +28,6 @@ public class UserLikeEventListener  extends UserAbstractEventListener implements
 		}
 	}
 	
-	//FIXME: Pasar a un  factory a nivel de la clase abstracta padre
 	private LikeInteraction createLikeInteraction(User user, Event event){
 		LikeInteraction interaction = new LikeInteraction();
 		interaction.setEvent(event);

@@ -9,11 +9,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mx.oiga.extractors.model.entities.Documento;
+
 import org.joda.time.LocalDate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.oiga.estructura.cultura.unam.extractors.CulturaUnamRepositoryExtractor;
-import org.oiga.estructura.model.beans.Documento;
 import org.oiga.model.entities.Event;
 import org.oiga.model.entities.EventCategory;
 
@@ -72,8 +73,8 @@ public class CulturaUnamRepositoryEventConverter extends EventConverter{
 		e.setPicture(img);
 		e.getDates().addAll( extractMetaDate(doc.getMeta()));
 		try{
-			e.setStartDate(e.getDates().get(0));
-			e.setEndDate(e.getDates().get( e.getDates().size() - 1));
+			e.setStartDate(new Date(e.getDates().get(0)));
+			e.setEndDate(new Date(e.getDates().get( e.getDates().size() - 1)));
 		}catch(Exception ex){
 			logger.warn("Parece que hubo un error al cargar las fechas:"
 					+ "Causa:"+ex.getMessage());
@@ -85,13 +86,13 @@ public class CulturaUnamRepositoryEventConverter extends EventConverter{
 		return e;
 	}
 	
-	private List<Date> extractMetaDate(Map<String, Object> meta){
+	private List<Long> extractMetaDate(Map<String, Object> meta){
 		 List<Long> longdates = (List<Long>) meta.get(CulturaUnamRepositoryExtractor.META_DATE_LIST);
 		 List<Date> dates = new ArrayList<Date>();
 		 for(Long l:longdates){
 			 dates.add(new Date(l*1000));
 		 }
-		 return dates;
+		 return longdates;
 		
 	}
 }

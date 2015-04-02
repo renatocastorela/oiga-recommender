@@ -17,7 +17,7 @@
 	<context:property-placeholder
         system-properties-mode="OVERRIDE"/>
 	
-	<context:component-scan base-package="org.oiga.model.services" />
+	<context:component-scan base-package="org.oiga.services" />
 	<!-- REST Connection to Neo4j server -->
 	<!-- 
 	 -->
@@ -36,5 +36,5 @@
 	</bean>
 	-->
 	<neo4j:config graphDatabaseService="graphDatabaseService"/>
-    <neo4j:repositories base-package="org.oiga.model.repositories" />
+    <neo4j:repositories base-package="org.oiga.repositories" />
 </beans>

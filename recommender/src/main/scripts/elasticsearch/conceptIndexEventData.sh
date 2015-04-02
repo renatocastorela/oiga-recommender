@@ -1,0 +1,7 @@
+curl -XPOST 'localhost:9200/events/event/1' -d '{ "name" : "festival musical increible", "description" : "musica y mas en la unam", "location" : "40.664167, -73.938611" }'
+curl -XPOST 'localhost:9200/events/event/2' -d '{ "name" : "Horror en la costa", "description" : "Lluvia de muerte en la costa"}, "location" : [-0.1275, 51.507222] '
+curl -XPOST 'localhost:9200/events/event/3' -d '{ "name" : "Podcasting", "description" : "arte en la alacena", "location" : { "lat" : 55.75, "lon" : 37.616667 } }'
+curl -XPOST 'localhost:9200/events/event/4' -d '{ "name" : "Obra de josefo ortiz", "description" : "esimacion del amor en tiempos de odio", "location" : "-33.859972, 151.211111" }'
+curl -XPOST 'localhost:9200/events/event/5' -d '{ "name" : "Obra: Amigos y enemigos ", "description" : "123123 12313", "location" : "eycs0p8ukc7v" }'
+curl -XPOST 'localhost:9200/events/event/6' -d '{ "name" : "Cine japones en el borda", "description" : " anime y mucho mas", "location" : "-33.859972, 151.211111"}'
+curl -XPOST 'localhost:9200/events/event/7' -d '{ "name" : "Muestra internacional de cine.", "description" : "Cine de todo el mundo", "location" : "40.664167, -73.938611"}'

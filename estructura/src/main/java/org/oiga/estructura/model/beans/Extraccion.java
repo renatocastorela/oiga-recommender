@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mx.oiga.extractors.model.entities.Documento;
+
 public class Extraccion {
 	private String urlRepositorio;
 	private String nombreRepositorio;

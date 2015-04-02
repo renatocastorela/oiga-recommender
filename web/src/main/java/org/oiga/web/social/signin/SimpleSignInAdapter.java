@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.oiga.model.entities.User;
-import org.oiga.model.services.UserService;
+import org.oiga.services.UserService;
 import org.oiga.web.exceptions.NullUserException;
 import org.oiga.web.utils.UserUtils;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class SimpleSignInAdapter implements SignInAdapter {
 	
 	@Override
 	public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
-		logger.debug("Iniciando session en Oiga!! : '"+userId+"'");
+		logger.debug("Iniciando session en Oiga!! : '"+userId+"'"+connection.getKey().getProviderId());
 		User user = userService.findByProviderId(userId, connection.getKey().getProviderId() );
 		try {
 			UserUtils.signIn(user);

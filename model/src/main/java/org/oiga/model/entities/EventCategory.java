@@ -8,18 +8,18 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @NodeEntity
 public class EventCategory {
 	@GraphId
 	private Long nodeId;
 	@Indexed(indexName="event_category_name", unique=true)
 	private String name;
+	private String hyphen;
+	private String uuid;
+	private String path;
 	private String icon;
 	private String color;
 	@RelatedTo(type="HAS")
-	@JsonIgnore
 	private Set<EventCategory> subcategories = new HashSet<EventCategory>();
 	
 	public String getName() {
@@ -51,5 +51,23 @@ public class EventCategory {
 	}
 	public void setSubcategories(Set<EventCategory> subcategories) {
 		this.subcategories = subcategories;
+	}
+	public String getHyphen() {
+		return hyphen;
+	}
+	public void setHyphen(String hyphen) {
+		this.hyphen = hyphen;
+	}
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
 	}
 }

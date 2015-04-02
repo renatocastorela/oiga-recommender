@@ -12,15 +12,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.DurationFieldType;
+import mx.oiga.extractors.model.entities.Documento;
+import mx.oiga.extractors.model.entities.Extraccion;
+
 import org.joda.time.LocalDate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.oiga.estructura.model.beans.Documento;
-import org.oiga.estructura.model.beans.Extraccion;
 import org.oiga.estructura.utils.JsoupUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

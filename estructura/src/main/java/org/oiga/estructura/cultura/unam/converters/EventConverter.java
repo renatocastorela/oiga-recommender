@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+import mx.oiga.extractors.model.entities.Documento;
+import mx.oiga.extractors.model.entities.Extraccion;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.oiga.estructura.model.beans.Documento;
-import org.oiga.estructura.model.beans.Extraccion;
 import org.oiga.model.entities.Event;
 import org.oiga.model.entities.Repository;
 import org.slf4j.Logger;

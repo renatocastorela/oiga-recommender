@@ -23,7 +23,7 @@ public class FoursquareController {
 	@Autowired
 	private FoursquareApi api;
 	
-	//FIXME: Pasar al Cliente
+	//TODO: Pasar a un servicio REST independiente
 	@RequestMapping(value="venues/{foursquareId}",method=RequestMethod.GET)
 	public @ResponseBody  CompleteVenue searchVenue(@PathVariable String foursquareId){
 		Result<CompleteVenue> result;

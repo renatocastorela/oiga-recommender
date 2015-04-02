@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.oiga.model.entities.Event;
 import org.oiga.model.entities.User;
 import org.oiga.model.entities.ViewInteraction;
-import org.oiga.model.services.UserEventService;
+import org.oiga.services.UserEventService;
 import org.oiga.web.context.events.UserViewEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

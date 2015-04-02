@@ -10,7 +10,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.oiga.model.entities.Event;
-import org.oiga.model.repositories.EventRepository;
+import org.oiga.repositories.EventRepository;
+import org.oiga.services.EventService;
 import org.oiga.web.context.events.UserLikeEvent;
 import org.oiga.web.context.events.UserRateEvent;
 import org.oiga.web.context.events.UserViewEvent;
@@ -44,6 +45,11 @@ public class EventController {
 	@Autowired
 	private EventRepository eventRepository;
 	
+	@Inject
+	private EventService eventService;
+	
+	
+	@Deprecated
 	@RequestMapping( value="find/{lt}/{ln}", method=RequestMethod.GET)
 	public @ResponseBody  List<Event> findWithinDistance(@PathVariable double lt,@PathVariable double ln)
 	{
@@ -60,6 +66,7 @@ public class EventController {
 		
 	}
 	
+	@Deprecated
 	@RequestMapping( value="search/like", method=RequestMethod.GET)
 	public @ResponseBody  List<Event> likeSearch(@RequestParam(value="q", required=false) String query,
 			@RequestParam(value="lt") double lt,
@@ -89,6 +96,7 @@ public class EventController {
 		
 	}
 	
+	@Deprecated
 	@RequestMapping( value="search/exact/{query}", method=RequestMethod.GET)
 	public @ResponseBody  List<Event> exactSearch(@PathVariable String query)
 	{
@@ -103,6 +111,7 @@ public class EventController {
 		
 	}
 	
+	@Deprecated
 	@RequestMapping( value="search/lucene/{query}", method=RequestMethod.GET)
 	public @ResponseBody  List<Event> luceneSearch(@PathVariable String query)
 	{
@@ -146,12 +155,22 @@ public class EventController {
 		return "explore";
 	}
 	
-	@RequestMapping(value = "{nodeId}")
-	public String showEventDetails(@PathVariable Long nodeId, HttpServletRequest request, ModelMap model){
-		Event event = eventRepository.findOne(nodeId);
+	@RequestMapping(value = "{fechaInicial:\\d*}/{fechaFinal:\\d*}/{hyphen}/{uuid}")
+	public String showEvent(@PathVariable String uuid, 
+			HttpServletRequest request, 
+			ModelMap model){
+		Event event = eventService.findByUuid(uuid);
+		if(event == null){
+			return "events/notFound";
+		}
 		model.put("event", event);
 		ctx.publishEvent(new UserViewEvent(event));
 		return "events/details";
+	}
+	
+	@RequestMapping(value="filter")
+	public String showCatalog(){
+		return "events/catalog";
 	}
 	
 }

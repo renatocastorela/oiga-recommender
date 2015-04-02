@@ -10,14 +10,14 @@
 	<sec:authorize access="isAnonymous()">
 	<ul class="anonymous nav navbar-nav navbar-right">
 		<li>
-			<button type="button" class="btn btn-primary navbar-btn btn-lg"
+			<button type="button" class="btn btn-primary navbar-btn "
 				data-toggle="modal" data-target="#signup-modal"
 				data-remote="${pageContext.request.contextPath}/navbar/signupModal">
 				<spring:message code="label.signup" />
 			</button>
 		</li>
 		<li>
-			<button type="button" class="btn-pink navbar-btn btn-lg"
+			<button type="button" class="btn btn-pink navbar-btn"
 				data-toggle="modal" data-target="#signin-modal"
 				data-remote="${pageContext.request.contextPath}/navbar/signinModal">
 				<spring:message code="label.login" />

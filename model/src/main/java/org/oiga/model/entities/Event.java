@@ -23,6 +23,8 @@ public class Event {
 	private Long nodeId;
 	@Indexed(indexType=IndexType.FULLTEXT, indexName="event_name")
 	private String name;
+	private String uuid;
+	private String hyphen;
 	@Indexed(indexType=IndexType.FULLTEXT, indexName="event_description")
 	private String description;
 	private String externalId;
@@ -45,6 +47,9 @@ public class Event {
 	@RelatedTo(type="PERFORMED")
 	@Fetch
 	private SimpleVenue venue;
+	@RelatedTo(type="HOSTED")
+	@Fetch
+	private Organizer organizer;
 	@RelatedToVia(type="VIEWED")
 	private Set<ViewInteraction> viewInteractions = new HashSet<ViewInteraction>();
 	@RelatedToVia(type = "LIKED", direction=Direction.BOTH)
@@ -198,8 +203,26 @@ public class Event {
 	public void setDates(List<Long> dates) {
 		this.dates = dates;
 	}
-	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public Set<LikeInteraction> getLikeInteractions() {
+		return likeInteractions;
+	}
+	public void setLikeInteractions(Set<LikeInteraction> likeInteractions) {
+		this.likeInteractions = likeInteractions;
+	}
+	public Set<RateInteraction> getRateInteractions() {
+		return rateInteractions;
+	}
+	public void setRateInteractions(Set<RateInteraction> rateInteractions) {
+		this.rateInteractions = rateInteractions;
+	}
 	public EventCategory getCategory(){
+		//FIXME:Eliminar Aunque no se use
 		if(!categories.isEmpty()){
 			return categories.iterator().next();
 		}else{
@@ -215,5 +238,17 @@ public class Event {
 	}
 	public void setViewInteractions(Set<ViewInteraction> viewInteractions) {
 		this.viewInteractions = viewInteractions;
+	}
+	public Organizer getOrganizer() {
+		return organizer;
+	}
+	public void setOrganizer(Organizer organizer) {
+		this.organizer = organizer;
+	}
+	public String getHyphen() {
+		return hyphen;
+	}
+	public void setHyphen(String hyphen) {
+		this.hyphen = hyphen;
 	}
 }

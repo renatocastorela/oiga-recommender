@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.oiga.exceptions.DuplicateUserException;
+import org.oiga.exceptions.NullEMailException;
 import org.oiga.model.entities.Role;
 import org.oiga.model.entities.User;
-import org.oiga.model.exceptions.DuplicateUserException;
-import org.oiga.model.exceptions.NullEMailException;
-import org.oiga.model.services.UserService;
+import org.oiga.services.UserService;
 import org.oiga.web.dto.SigninForm;
 import org.oiga.web.dto.SignupForm;
 import org.oiga.web.exceptions.NullUserException;

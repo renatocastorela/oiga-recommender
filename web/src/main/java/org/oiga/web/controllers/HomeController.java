@@ -1,7 +1,5 @@
 package org.oiga.web.controllers;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.oiga.model.entities.Event;
-import org.oiga.model.repositories.EventCategoryRepository;
-import org.oiga.model.repositories.EventRepository;
-import org.oiga.web.utils.LocationUtils;
+import org.oiga.repositories.EventCategoryRepository;
+import org.oiga.repositories.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,18 +37,10 @@ public class HomeController {
 	//TODO:Pasar esta carga inicial a ajax
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(
-			@CookieValue(value = "location", required=false) String location, 
+			@CookieValue(value = "oiga.location", required=false) String location, 
 			HttpServletRequest request, 
 			ModelMap model){
-		try {
-			logger.debug("Client IP "+request.getRemoteAddr()+",  "+request.getHeader("X-Forwarded-For")+", "+InetAddress.getLocalHost().getHostAddress());
-		} catch (UnknownHostException e1) {
-			logger.error("Host no conocido",e1);
-		}
-		//TODO:Pasar esta carga inicial a ajax
-		if(location == null){
-			location = LocationUtils.getUserLocation(request);
-		}
+	
 		logger.debug("cookie location: "+location);
 		HashMap<String, String> jsonLoc;
 		//FIXME: Quitar esta horrible implementacion, pasar todo este codigo al cliente para resolver 

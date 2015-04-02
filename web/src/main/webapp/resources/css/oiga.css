@@ -1,15 +1,21 @@
 body
  { 
- 	padding-top: 70px; 
+	/*Es usado para el jumbotron*/
+   	padding-bottom: 20px;
+	padding-top: 50px; 
  } 
 /*
- * Custom Navbar
- *
+map-canvas es un estilo utilizado para desplegar una caja con un mapa
+que combinado con bootstrap permite visualizar la ubicacion datos. Es responsivo.  
  */
- .navbar
- {
- 	margin-bottom: 0px;
- }
+.map-canvas{
+  	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    height: 260px;
+    width: 300px;
+    z-index: 1;	
+}
+
  .navbar-brand{
  	padding: 0px;
  }
@@ -18,12 +24,19 @@ body
  	display: none;
  }
  
- #search-input
+ .navbar-input
  {
- 	height:45px;
- 	width: 300px;
+ 	width: 200px;
  }
- 
+ .slick-prev:before, .slick-next:before{
+ 	 	color: red;
+ }
+ .slick-prev, .slick-next{ 
+  
+ }
+ .sidebar-nav-fixed{
+ 	width: 20%;
+ }
  /**
   *Buttons
   *
@@ -36,7 +49,14 @@ body
     text-align: center;
     border-radius: 3px 3px 3px 3px;
     padding: 15px 15px 15px 60px;
-} 
+}
+.powered-by-foursquare{
+	width:200px;
+}
+.fs-navy, .fs-navy:hover, .fs-navy:focus{
+	color: #0732A2;
+	text-decoration: none;
+}
 /*
 Facebook-login
 ------------------------------------------------------------ */
@@ -115,17 +135,78 @@ section#signup, section#signin {
  .error-label{
  	color: #d14;
  }
-/**
- *Profile
- */ 
-.profile-header{
-	
-	
-}
-
 .center-block {
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
+
+/**
+ * ui autocomplete 
+ */
+.ui-front { z-index: 2000 !important; }
+
+/**
+ *Panels
+ */
+ .panel-platano > .panel-heading {
+    background-color: #F0E68C;
+    border-color: #FFFF00; 
+    color: #FF6347;
+}
+ .panel-platano{
+ 	 border-color: #FFFF00;
+ }
+ .text-overflow{
+ 	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+ }
+/**
+ * Events
+ */
+ .events-container{
+ 	padding:0px 25px 0px 25px
+ }
+ .event-box{
+ 	min-height: 300px;
+ }
+ 
+ /**
+  *well
+  */
+ .top-well{
+ 	margin-top:20px;
+ }
+ .inline-block{
+ 	display: inline-block;
+ }
+ 
+/**
+ *labels
+ */ 
+ .label-salmon{
+ 	background-color: #FA8072;
+ }
+ .label-sandy{
+ 	background-color: #F4A460;
+ }
+ .label-thistle{
+ 	background-color: #D8BFD8;
+ }
+.label-olive{
+	background-color: #808000;
+}
+.label-violet{
+	background-color: #DB7093;
+}
+.label-gold{
+	background-color: #FFD700;
+} 
+.label-brown{
+	background-color: #A52A2A;
+}
+.label-coral{
+	background-color: #FF7F50;
+}  
  

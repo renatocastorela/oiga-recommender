@@ -1,10 +1,5 @@
-<footer class="bs-footer" role="contentinfo">
-	<div class="container">
-		<p>Oiga Recommender</p>
-		<ul class="footer-links">
-			<li><a href="#">Documentacion</a></li>
-			<li class="muted">·</li>
-			<li><a href="#"></a></li>
-		</ul>
-	</div>
+<footer>
+      <div class="container">
+        <img src="${pageContext.request.contextPath}/resources/img/powered-by.png" alt="Powered By foursquare" class="powered-by-foursquare"/>
+      </div>
 </footer>

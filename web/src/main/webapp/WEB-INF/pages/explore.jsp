@@ -15,56 +15,74 @@
 		<div id="map" class="map"><!-- Load MapBox Map--></div>
     </div>
 	<div hidden="true" id="event-template">
-		<div class='panel panel-danger display-none' nodeid='{{nodeId}}'>
+		<div class='panel panel-danger display-none' uuid='{{uuid}}'>
 			<div class='panel-heading'  >
 					<h3 class='panel-title'> {{name}}</h3>
 					</div>
 				<div class='panel-body'>
 	    		<dl>
 	    			<dt>Fecha</dt>
-	    			<dd>{{startDate}} - {{endDate}}<dd>
+	    			<dd>{{start_date}} - {{end_date}}<dd>
 					<dt>Organiza</dt>
   					<dd> {{host}}<dd>
   					<dt>Recinto</dt>
   					<dd>{{location}}<dd>
-  					<dt>Tipo</dt>
-  					<dd>{{category.name}}</dd>
 				</dl>		
-				<a href='${pageContext.request.contextPath}/events/details/{{nodeId}}' target="_blank" class="btn btn-primary btn-xs">Detalles</a>
+				<a href='${pageContext.request.contextPath}/events/details/{{uuid}}' target="_blank" class="btn btn-primary btn-xs">Detalles</a>
 			</div>
-		</div>"
+		</div>
+	</div>
+	<div hidden="true" id="event-not-found">
+		<div class='panel panel-danger display-none' uuid='{{uuid}}'>
+				<div class='panel-body'>
+	    		<p> No se encontraron eventos </p>
+			</div>
+		</div>
 	</div>
 	<script type="text/javascript">
 	var map;
     var markerLayer;
     var template = $("#event-template").html();
-    
-    function init_navbar() 
-	{
-    	$("#search-form").submit(function(event){
-    		console.debug("submiting");
-    		if (typeof window.history.pushState == 'function') {
-    			console.debug("state");
-    			history.pushState({}, null, ctx+"/events/explore?"
-    					+"q="+encodeURIComponent(this.q.value)
-    					+"&lt="+encodeURIComponent(this.lt.value)
-    					+"&ln="+encodeURIComponent(this.ln.value));
-    			
-    		}
-    		load_events();
-    		event.preventDefault();
-    	});
+	function push_state(form){
+		if (typeof window.history.pushState == 'function') {
+			console.debug("state");
+			history.pushState({}, null, ctx+"/events/explore?"
+					+"q="+encodeURIComponent(form.q.value)
+					+"&lt="+encodeURIComponent(form.lt.value)
+					+"&ln="+encodeURIComponent(form.ln.value)
+					+"&place="+encodeURIComponent(form.place.value)
+					+"&when="+encodeURIComponent(form.when.value)
+					+"&start_date="+encodeURIComponent(form.start_date.value) 
+					+"&end_date="+encodeURIComponent(form.end_date.value) );
+			
+		}
 	}
-    
+	
+	$("#search-form").submit(function(event){
+		var form = this;
+		console.debug("submiting");
+		event.preventDefault();
+		place =  $( "input[name=place]" ).val();
+		reverse_geocoding(place, function(data){
+				set_geoname(data);
+				set_date_range();
+				push_state(form);
+				load_events();
+		});
+		
+		
+	});
+	</script>
+	<script type="text/javascript">
     function update_params_from_uri(){
     	$("input[name=q]").val(getParameterByName("q"));
+    	$("select[name=when]").val(getParameterByName("when"));
+    	$("input[name=place]").val(getParameterByName("place"));
     	$("input[name=lt]").val(getParameterByName("lt"));
     	$("input[name=ln]").val(getParameterByName("ln"));
     }
 
 	function load_map(){
-		
-		
 		load_events();
 	}
 	
@@ -92,39 +110,39 @@
 		return result; 
 	}
 	
-	function load_events_on_map(data) {
+	function load_events_on_map(error, data) {
 		var features = [];
 		var items = [];
 		var bounds = [];
-		
-		$.each(data, function(key, val) {
-			if (val.venue.adress == null) {
-				console.warn("Adress is null");
-				return true;
-			}
-			var p = parse_wkt(val.venue.adress.wkt);
-			bounds.push([ p.coords.latitude, p.coords.longitude]);
+		$.each(data.hits.hits, function(key, val) {
+			var v = val._source;
+			var coord = [ v.wkt[1], v.wkt[0] ]; 
+			bounds.push(coord);
 			/*Cargando features*/
 			features.push({
 				type : 'Feature',
 				geometry : {
 					type : 'Point',
-					coordinates : [ p.coords.longitude,
-							p.coords.latitude ]
+					coordinates : v.wkt
 				},
 				properties : {
 					'marker-color' : '#000',
 					'marker-symbol' : 'star-stroked',
-					'title' : val.name,
-					'id' : val.nodeId
+					'title' : v.name,
+					'id' : v.uuid
 	
 				}
 			});
 			/*Cargando Items*/
-			var output = Mustache.render(template, val);					
+			v.start_date = moment(v.start_date).calendar();
+			v.end_date = moment(v.end_date).calendar();
+			var output = Mustache.render(template, v);					
 			items.push(output);
 		});
-		if(typeof map == 'undefined'){
+		if(items.length == 0) { items.push( $("#event-not-found").html()); }
+		if( bounds.length == 0){ bounds.push( [  19.428, -99.141 ]); }
+		if(typeof map == 'undefined' ){
+			L.mapbox.accessToken = 'pk.eyJ1IjoicmVuYXRvLWNhc3RvcmVsYSIsImEiOiJORm9oR0dBIn0.-Fq4UmqK-5x1e8ZyRyZneQ';
 			map = L.mapbox.map('map', 'renato-castorela.map-hgnx2ffm')
 				.fitBounds( bounds , {
 					paddingTopRight : [ 400, 0 ]
@@ -144,28 +162,25 @@
 			        	layer.bindPopup(feature.properties.title);
 			   		}
 				}
-			}).addTo(map);
-	/*Registrando eventos en la capa de marker layer*/
-		markerLayer.on('click', function(e) {
-			/*Centrando el mapa a la posicion del marker*/
+			}).addTo(map); 
+	
+		 markerLayer.on('click', function(e) {
 			map.panTo(e.layer.getLatLng());
-			var nodeId = e.layer.feature.properties.id;
-			/*Scrolling to element*/
+			var uuid = e.layer.feature.properties.id;
 			$('html, body').animate(
 					{
 						scrollTop : $(
-								"div[nodeid='" + nodeId
+								"div[uuid='" + uuid
 										+ "']")
 								.offset().top - 60
 					}, 200);
-			$(
-					"#events-result > div[nodeid!='"
-							+ nodeId + "']")
+			$("#events-result > div[uuid!='"
+							+ uuid + "']")
 					.removeClass("panel-primary");
-			$("div[nodeid='" + nodeId + "']")
+			$("div[uuid='" + uuid + "']")
 					.toggleClass("panel-primary");
-		});
-	
+		}); 
+		 
 		$("#events-result > div").slideUp();
 		$("#events-result").empty();
 		$("#events-result").append(items.join(" "));
@@ -173,12 +188,12 @@
 		$("#events-result > div").click(function(e) {
 			$(".panel-primary").removeClass("panel-primary");
 			$(this).addClass("panel-primary");
-			var nodeId = $(this).attr("nodeid");
+			var uuid = $(this).attr("uuid");
 			$('html, body').animate({
 				scrollTop : $(this).offset().top - 60
 			}, 200);
 			markerLayer.eachLayer(function(e) {
-				if (e.feature.properties.id == nodeId) {
+				if (e.feature.properties.id == uuid) {
 					console.debug(e.feature.properties.id);
 					map.panTo(e.getLatLng());
 					e.openPopup();
@@ -192,25 +207,59 @@
 }
 
 function load_events() {
+	var query =  	$("input[name=q]").val();
+	var start_date =  $("input[name=start_date]").val();
+	var end_date =  $("input[name=end_date]").val();
+	var ln = $( "input[name=ln]" ).val();
+	var lt = $( "input[name=lt]" ).val();
+	
+	client.search({
+		index : 'events',
+		body : {
+			query : {
+				filtered :{
+					query : {
+						bool : {
+							should : [
+						    	{ match_phrase : { name :{ query : query, slop : 6, boost : 2, analyzer : "spanish" }}},
+						    	{ match : { name : { query : query, boost : 1.5 }}},
+					            { match : { description : { query : query }}}, 
+					            { match : { location : { query : query }}},
+					            { match : { venue_name : { query : query }}}, 
+					            { match : { host : { query : query, boost : 1.5 }}},
+					            { match : { "categories.category" : { query : query }}}
+							]
+						}
+					},
+					filter : {
+			            and : [
+			                //{ range : { start_date : { from : start_date, to : end_date }}}, 
+			                { geo_distance : { distance : "120km",
+			                                   "event.wkt" : { lat : lt, lon : ln }}}]
+					}
+				}
+			}	
+		}
+	}, load_events_on_map);
+	
+	/* 
 	$.getJSON(ctx+"/events/search/like/",
 			{
 				q : $("input[name=q]").val(),
 				lt : $("input[name=lt]").val(),
 				ln : $("input[name=ln]").val(),
 			},
-			load_events_on_map);
+			load_events_on_map); */
 }
-function init_page(){
-	init_navbar();
-	update_params_from_uri();
-	load_events();
-}
+
 window.onpopstate = function (event) {
 	  update_params_from_uri();
 	  load_events();
 	}
-	init_page();
+window.onload = function(event){
+	update_params_from_uri();
+	load_events();
+}
 </script>
-	
-	</jsp:body>
+</jsp:body>
 </l:base>

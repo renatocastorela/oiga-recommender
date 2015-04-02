@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.oiga.model.entities.User;
-import org.oiga.model.services.UserEventService;
-import org.oiga.model.services.UserService;
+import org.oiga.services.UserEventService;
+import org.oiga.services.UserService;
 import org.oiga.web.dto.UserDetails;
 import org.oiga.web.utils.UserUtils;
 import org.slf4j.Logger;

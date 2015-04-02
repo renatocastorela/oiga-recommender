@@ -12,7 +12,7 @@ import org.oiga.estructura.parser.CulturaUnamDateParser;
 import org.oiga.model.entities.Event;
 import org.oiga.model.entities.EventCategory;
 import org.oiga.model.entities.SimpleVenue;
-import org.oiga.model.services.SimpleVenueService;
+import org.oiga.services.SimpleVenueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

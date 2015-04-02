@@ -5,12 +5,13 @@ import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
-import org.springframework.data.neo4j.support.index.IndexType;
 
 @NodeEntity
 public class SimpleVenue {
 	@GraphId
 	private Long nodeId;
+	private String uuid;
+	private String hyphen;
 	private String foursquareId;
 	@Indexed(indexName="venue_name")
 	private String name;
@@ -36,4 +37,17 @@ public class SimpleVenue {
 	public void setAdress(Adress adress) {
 		this.adress = adress;
 	}
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getHyphen() {
+		return hyphen;
+	}
+	public void setHyphen(String hyphen) {
+		this.hyphen = hyphen;
+	}
+	
 }

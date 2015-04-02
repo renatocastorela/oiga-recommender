@@ -22,11 +22,11 @@
 <!-- Mapbox -->
 <link href='//api.tiles.mapbox.com/mapbox.js/v1.6.0/mapbox.css'
 	rel='stylesheet' />
-<!-- JQuery UI -->
-<link
-	href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'
-	rel='stylesheet' />
+<!-- Slick -->
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.3.15/slick.css"/>
+<!-- JQuery UI --> 
 
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
 <!--[if lte IE 8]>
     <link href='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.ie.css' rel='stylesheet'>
   	<![endif]-->
@@ -41,16 +41,18 @@
 <!-- Mapbox -->
 <link href="${pageContext.request.contextPath}/resources/css/map.css"
 	rel="stylesheet" media="screen">
-<script src='//api.tiles.mapbox.com/mapbox.js/v1.6.0/mapbox.js'></script>
+
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
 <!-- jQuery -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 <!-- jQuery plugins -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/jquery.cookie.js"></script>
 <script 
 	src="${pageContext.request.contextPath}/resources/js/jquery.raty.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.3.15/slick.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
@@ -60,10 +62,24 @@
 	src="${pageContext.request.contextPath}/resources/js/geoPositionSimulator.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/mustache.js"></script>
+<!-- Elastic search -->
+<script
+	src="${pageContext.request.contextPath}/resources/js/elasticsearch.js"></script>
+<!-- Moment js -->
+<script
+	src="${pageContext.request.contextPath}/resources/js/moment-with-locales.min.js"></script>
+<!-- waypoints -->
+<script
+	src="${pageContext.request.contextPath}/resources/js/waypoints.min.js"></script>
+	
 </head>
 <!-- Variables globales -->
 <script type="text/javascript">
 	var EVENT_ID_REGEX = /.*events\/([0-9]*)/;
+	var client = elasticsearch.Client({
+		  host: 'localhost:9200',
+		  log: 'trace'
+		});
 	var ctx = "${pageContext.request.contextPath}";
 	var oiga = new Object();
 	if (typeof $.cookie("oiga.rememberMe") == 'undefined') {
@@ -152,27 +168,7 @@
  </script>
 	<!-- Oiga Scripts -->
 	<script type="text/javascript">
-		$.cookie.json = true;
-		if (typeof $.cookie("location") == 'undefined') {
-			$.ajax({
-				dataType : "json",
-				url : "https://freegeoip.net/json/",
-				async : false
-			}).done(
-					function(data) {
-						$.cookie("location", data, {
-							path: '/'
-						});
-						console.debug("Location : "
-								+ $.cookie("location").region_name);
-					})
-					.error(function(data){
-						console.error("No se pudo cargar la ubicacion");
-						//TODO: Agregar una alternativa
-					});
-		} else {
-			console.debug(">Location : " + $.cookie("location").region_name);
-		}
+  		
 		
 		function getParameterByName(name) {
 			name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -181,8 +177,65 @@
 			return results == null ? "" : decodeURIComponent(results[1]
 					.replace(/\+/g, " "));
 		}
+		
+		function get_event_box(template, node){
+    		event = node[0].data;
+    		event.startDateParam = moment(event.startDate).format("DDMMYYYY"); 
+            event.endDateParam = moment(event.endDate).format("DDMMYYYY");
+    		event.startDate = moment(event.startDate).calendar();
+            event.endDate = moment(event.endDate).calendar();
+            event.venue = node[1].data;
+            event.organizer = node[4].data;
+            event.categories = [];
+            
+            $.each(node[2], function(i, val){
+            	console.log(val);
+            	category = {
+            			name : node[2][i],
+            			path : node[3][i],
+            	};
+            	event.categories.push(category);
+            }); 
+    		return Mustache.render(template, event);
+            
+    	}
+		
+		function run_cypher(query, params, success) {
+    		data = {
+    			query : query,
+    			params : params
+    		};
+    		data = JSON.stringify(data);
+    		$.ajax({
+    			type : "POST",
+    			url : "http://localhost:7474/db/data/cypher",
+    			data : data,
+    			success : success,
+    			accepts : "application/json",
+    			contentType : "application/json",
+    			dataType : "json"
+    		});
+    	}
+		
+		function append_event_to_row(node, row) {
+    		$(document.createElement('div'))
+    			.addClass("col-lg-4")
+    			.append(get_event_box(template, node))
+    			.appendTo(row);
+    	}
+		
+
+		/**
+		 * Returns a random integer between min (inclusive) and max (inclusive)
+		 * Using Math.round() will give you a non-uniform distribution!
+		 */
+		function getRandomInt(min, max) {
+		    return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
 	</script>
+	
 	<jsp:include page="/WEB-INF/pages/navbar/navbarMain.jsp" />
 	<jsp:doBody />
+	<jsp:include page="/WEB-INF/layouts/footer.jsp" />
 </body>
 </html>

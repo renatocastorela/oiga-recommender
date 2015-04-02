@@ -1,7 +1,7 @@
 package org.oiga.web.social.security;
 
 import org.oiga.model.entities.User;
-import org.oiga.model.repositories.UserRepository;
+import org.oiga.repositories.UserRepository;
 import org.oiga.web.dto.UserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

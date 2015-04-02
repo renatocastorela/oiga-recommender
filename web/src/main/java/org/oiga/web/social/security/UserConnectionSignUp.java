@@ -1,9 +1,9 @@
 package org.oiga.web.social.security;
 
+import org.oiga.exceptions.DuplicateUserException;
+import org.oiga.exceptions.NullEMailException;
 import org.oiga.model.entities.User;
-import org.oiga.model.exceptions.DuplicateUserException;
-import org.oiga.model.exceptions.NullEMailException;
-import org.oiga.model.services.UserService;
+import org.oiga.services.UserService;
 import org.oiga.web.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

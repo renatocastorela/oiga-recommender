@@ -8,7 +8,7 @@ import org.jsoup.nodes.Document;
 import org.oiga.estructura.analysis.AnalysisEngine;
 import org.oiga.estructura.repository.RepositoryExtractor;
 import org.oiga.estructura.repository.RepositoryReader;
-import org.oiga.model.services.EventService;
+import org.oiga.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

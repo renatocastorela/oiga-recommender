@@ -87,6 +87,7 @@
      </div>
       <script type="text/javascript">
       	var foursquare_controller_url = ctx + "/venues/" + $("#foursquareId").val();
+
 		console.debug("Venue request "+foursquare_controller_url);
       	$.getJSON(foursquare_controller_url)
       		.done(function( data ){
@@ -95,10 +96,12 @@
       					+data.location.crossStreet+"<br>"
       					+data.location.city+", "+data.location.state+" "+data.location.postalCode);
       	});
+      	
       	function load_map(data)
       	{
       		var location = data.location;
-      		var map = L.mapbox.map('map_container', 'renato-castorela.map-hgnx2ffm').setView([location.lat, location.lng], 15);
+          	L.mapbox.accessToken = 'pk.eyJ1IjoicmVuYXRvLWNhc3RvcmVsYSIsImEiOiJORm9oR0dBIn0.-Fq4UmqK-5x1e8ZyRyZneQ';
+        	var map = L.mapbox.map('map_container', 'renato-castorela.map-hgnx2ffm').setView([location.lat, location.lng], 15);
       		L.mapbox.markerLayer({
       		    type: 'Feature',
       		    geometry: {
